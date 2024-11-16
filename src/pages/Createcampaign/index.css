@@ -1,0 +1,231 @@
+/* Full Page Container */
+.full-width-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7f7f7;
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px; /* Added padding to prevent content from touching edges */
+    box-sizing: border-box; /* Ensures padding does not affect width/height calculation */
+  }
+  
+  /* Heading Style */
+  .heading-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Inner Container */
+  .centered-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px; /* Max width */
+    height: auto;
+    margin-top: 20px;
+  }
+  
+  /* Content Container for Horizontal Layout */
+  .content-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 40px;
+  }
+  
+  /* Campaign Image Section */
+  .image-upload-section {
+    flex: 1;
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+  }
+  
+  .image-upload-section .label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  
+  .image-upload-section .input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  /* Styling the file input wrapper */
+.image-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30%;
+    text-align: center;
+    
+  }
+  /* Hide default file input */
+.input-file {
+    width: 100%;
+    padding: 12px 50px 12px 20px; /* Add extra padding on the right for the icon */
+    font-size: 14px;
+    color: #333;
+    background-color: #f1f1f1;
+    border: 1px solid #d6d6d6;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+    display: inline-block;
+  }
+  
+  /* Add an upload icon inside the file input */
+  .input-file::before {
+    content: '📤'; /* Use your desired icon */
+    font-size: 18px;
+    color: #28a745;
+    position: absolute;
+    left: 10px;
+    
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  /* Style the file input on hover */
+  .input-file:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .upload-label {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  /* Wrapping the input to create a custom appearance */
+  .file-input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .file-input {
+    display: none; /* Hide the default file input */
+  }
+  
+  .file-input-label {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #f1f1f1;
+    color: #333;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    position: relative;
+  }
+  
+  .file-input-label:hover {
+    background-color: #e0e0e0;
+  }
+  
+  /* Adding the icon to the left side of the label */
+  .upload-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #28a745;
+  }
+  
+  /* Styling for the icon when there is an image */
+  .folder-icon {
+    font-size: 80px;
+    color: #28a745;
+    margin-bottom: 10px;
+  }
+  
+  .campaign-image {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+
+  /* Form Data Section */
+  .form-scrollable {
+    flex: 2;
+    overflow-y: auto; /* Allows scrolling when content overflows */
+    max-height: 600px; /* Set a fixed height for scrolling */
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
+    width: 100%;
+  }
+  
+  /* Form Field Styling */
+  .label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  .input,
+  .textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+  
+  .textarea {
+    resize: vertical;
+  }
+  
+  /* Button Styling */
+  .btn-cancel {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 20px;
+  }
+  
+  .btn-submit {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #d6d6d6;
+  }
+  
+  .btn-submit:hover {
+    background-color: #218838;
+  }
+  
