@@ -50,18 +50,19 @@ const ShopInfoForm = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({
-      owner,
-      title,
-      description,
-      target,
-      deadline,
-      minAmount,
-      image,
-      tier1URI,
-      tier2URI,
-      tier3URI,
-    });
+    console.log("checking that values is appear or not" , e)
+    // onSubmit({
+    //   owner,
+    //   title,
+    //   description,
+    //   target,
+    //   deadline,
+    //   minAmount,
+    //   image,
+    //   tier1URI,
+    //   tier2URI,
+    //   tier3URI,
+    // });
   };
 
   const navigate = useNavigate();
@@ -350,13 +351,13 @@ const ShopInfoForm = ({ onSubmit }) => {
         <div className="image-upload">
           <i className="folder-icon" style={{ fontSize: '100px', marginBottom: '10px' }}>📂</i><br />
           <label className="upload-label">Upload Campaign Image</label>
-          <input type="file" id="campaignImage" className="input" required />
+          <input type="file" id="campaignImage" className="input"  />
         </div>
       </div>
 
       {/* Form Data Section */}
       <div className="form-scrollable">
-        <form onSubmit="handleSubmit(event)">
+        <form onSubmit= {handleSubmit}>
           <div className="form-group">
             <label className="label">Owner Wallet Address</label>
             <input
@@ -364,7 +365,7 @@ const ShopInfoForm = ({ onSubmit }) => {
               className="input"
               placeholder="Owner Wallet Address"
               onChange="setOwner(event.target.value)"
-              required
+              
             />
           </div>
           <div className="form-group">
@@ -374,7 +375,6 @@ const ShopInfoForm = ({ onSubmit }) => {
               className="input"
               placeholder="Title"
               onChange="setTitle(event.target.value)"
-              required
             />
           </div>
           <div className="form-group">
@@ -383,7 +383,6 @@ const ShopInfoForm = ({ onSubmit }) => {
               className="textarea"
               placeholder="Description"
               onChange="setDescription(event.target.value)"
-              required
             ></textarea>
           </div>
           <div className="form-group">
@@ -392,8 +391,7 @@ const ShopInfoForm = ({ onSubmit }) => {
               type="number"
               className="input"
               placeholder="Target Amount"
-              onChange="setTarget(event.target.value)"
-              required
+              onChange= {(event) => setTarget(event.target.value)}
             />
           </div>
           <div className="form-group">
@@ -402,7 +400,7 @@ const ShopInfoForm = ({ onSubmit }) => {
               type="date"
               className="input"
               onChange="setDeadline(event.target.value)"
-              required
+              
             />
           </div>
           <div className="form-group">
@@ -412,7 +410,7 @@ const ShopInfoForm = ({ onSubmit }) => {
               className="input"
               placeholder="Minimum Amount"
               onChange="setMinAmount(event.target.value)"
-              required
+              
             />
           </div>
           <div className="form-group">
