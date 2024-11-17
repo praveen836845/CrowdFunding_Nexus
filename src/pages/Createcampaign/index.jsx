@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Sidebar } from "react-pro-sidebar";
 import { useNavigate } from "react-router-dom";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { CrowdFundingABI, CrowdFundingAddress } from "abi/constants";
 
-import { abi } from "../../";
+
+import {CrowdFundingABI} from '../../abi/constants'
+
 import './index.css';
 
 import { Button, Img, Text } from "components";
