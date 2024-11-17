@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Sidebar } from "react-pro-sidebar";
-
 import { useNavigate } from "react-router-dom";
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { CrowdFundingABI, CrowdFundingAddress } from "abi/constants";
 
+import { abi } from "../../";
 import './index.css';
 
 import { Button, Img, Text } from "components";
@@ -58,17 +60,6 @@ const ShopInfoForm = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("checking that values is appear or not" , e)
-    console.log("checking that values is appear or not" , owner)
-    console.log("checking that values is appear or not" , title)
-    console.log("checking that values is appear or not" , description)
-    console.log("checking that values is appear or not" , target)
-    console.log("checking that values is appear or not" , deadline)
-    console.log("checking that values is appear or not" , minAmount)
-    console.log("checking that values is appear or not" , image)
-    console.log("checking that values is appear or not" , tier1Image)
-    console.log("checking that values is appear or not" , tier2Image)
-    console.log("checking that values is appear or not" , tier3Image)
 
     if (!owner || !title || !description || !target || !deadline || !minAmount || !image || !tier1Image || !tier2Image || !tier3Image) {
       alert("Please fill all the fields");
