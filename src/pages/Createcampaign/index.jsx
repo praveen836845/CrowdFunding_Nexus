@@ -20,49 +20,50 @@ const ShopInfoForm = ({ onSubmit }) => {
   const [tier2URI, setTier2URI] = useState("");
   const [tier3URI, setTier3URI] = useState("");
 
+  
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      setImage(file); 
     }
   };
 
   const handletier1URI = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setTier1URI(URL.createObjectURL(file));
+      setTier1URI(file);
     }
   };
 
   const handletier2URI = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setTier2URI(URL.createObjectURL(file));
+      setTier2URI(file);
     }
   };
 
   const handletier3URI = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setTier3URI(URL.createObjectURL(file));
+      setTier3URI(file);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("checking that values is appear or not" , e)
-    // onSubmit({
-    //   owner,
-    //   title,
-    //   description,
-    //   target,
-    //   deadline,
-    //   minAmount,
-    //   image,
-    //   tier1URI,
-    //   tier2URI,
-    //   tier3URI,
-    // });
+    console.log("checking that values is appear or not" , owner)
+    console.log("checking that values is appear or not" , title)
+    console.log("checking that values is appear or not" , description)
+    console.log("checking that values is appear or not" , target)
+    console.log("checking that values is appear or not" , deadline)
+    console.log("checking that values is appear or not" , minAmount)
+    console.log("checking that values is appear or not" , image)
+    console.log("checking that values is appear or not" , tier1URI)
+    console.log("checking that values is appear or not" , tier2URI)
+    console.log("checking that values is appear or not" , tier3URI)
+
   };
 
   const navigate = useNavigate();
@@ -116,44 +117,6 @@ const ShopInfoForm = ({ onSubmit }) => {
                       </Text>
                     </div>
                   </div>
-                  {/* <div
-                    className="common-pointer flex flex-col font-urbanist items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/message")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[47%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_car.svg"
-                        alt="car"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/message")}
-                      >
-                        Message
-                      </Text>
-                    </div>
-                  </div> */}
-                  {/* <div
-                    className="common-pointer flex flex-col font-urbanist items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/settings")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[45%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_settings.svg"
-                        alt="settings"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/settings")}
-                      >
-                        Settings
-                      </Text>
-                    </div>
-                  </div> */}
                 </div>
               </div>
               <div className="flex flex-col gap-4 justify-start w-full">
@@ -183,113 +146,9 @@ const ShopInfoForm = ({ onSubmit }) => {
                       </Text>
                     </div>
                   </div>
-                  {/* <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/activebid")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-1/2 md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_judge.svg"
-                        alt="judge"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/activebid")}
-                      >
-                        Active Bid
-                      </Text>
-                    </div>
-                  </div> */}
-                  {/* <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/saved")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[39%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_clock.svg"
-                        alt="clock"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/saved")}
-                      >
-                        Saved
-                      </Text>
-                    </div>
-                  </div> */}
                 </div>
               </div>
-              {/* <div className="flex flex-col gap-4 justify-start w-full">
-                <Text
-                  className="ml-4 md:ml-[0] text-gray-901 text-xs tracking-[0.12px]"
-                  size="txtUrbanistMedium12Gray901"
-                >
-                  MY PROFILE
-                </Text>
-                <div className="flex flex-col gap-2 items-center justify-start w-full">
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/myprofilecollection")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-1/2 md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_user_24X24.svg"
-                        alt="user One"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/myprofilecollection")}
-                      >
-                        Collection
-                      </Text>
-                    </div>
-                  </div>
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/myprofilewallet")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[38%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_computer.svg"
-                        alt="computer"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/myprofilewallet")}
-                      >
-                        Wallet
-                      </Text>
-                    </div>
-                  </div>
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/myprofilehistory")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-2/5 md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_clock_24X24.svg"
-                        alt="clock One"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/myprofilehistory")}
-                      >
-                        History
-                      </Text>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
+
             </div>
             <div className="font-urbanist h-[258px] md:h-[263px] mb-[17px] ml-4 md:ml-[0] relative w-[88%]">
               <div className="absolute bg-gray-900 bottom-[0] h-[233px] inset-x-[0] mx-auto rounded-[15px] w-[234px]"></div>
@@ -351,7 +210,7 @@ const ShopInfoForm = ({ onSubmit }) => {
         <div className="image-upload">
           <i className="folder-icon" style={{ fontSize: '100px', marginBottom: '10px' }}>📂</i><br />
           <label className="upload-label">Upload Campaign Image</label>
-          <input type="file" id="campaignImage" className="input"  />
+          <input type="file" id="campaignImage" className="input" onChange={(e) => handleImageUpload(e)} />
         </div>
       </div>
 
@@ -364,7 +223,7 @@ const ShopInfoForm = ({ onSubmit }) => {
               type="text"
               className="input"
               placeholder="Owner Wallet Address"
-              onChange="setOwner(event.target.value)"
+              onChange={(event) => setOwner(event.target.value)}
               
             />
           </div>
@@ -374,7 +233,7 @@ const ShopInfoForm = ({ onSubmit }) => {
               type="text"
               className="input"
               placeholder="Title"
-              onChange="setTitle(event.target.value)"
+              onChange={(event) => setTitle(event.target.value)}
             />
           </div>
           <div className="form-group">
@@ -382,7 +241,7 @@ const ShopInfoForm = ({ onSubmit }) => {
             <textarea
               className="textarea"
               placeholder="Description"
-              onChange="setDescription(event.target.value)"
+              onChange={(event) => setDescription(event.target.value)}
             ></textarea>
           </div>
           <div className="form-group">
@@ -399,7 +258,7 @@ const ShopInfoForm = ({ onSubmit }) => {
             <input
               type="date"
               className="input"
-              onChange="setDeadline(event.target.value)"
+              onChange={(event) => setDeadline(event.target.value)}
               
             />
           </div>
@@ -409,21 +268,21 @@ const ShopInfoForm = ({ onSubmit }) => {
               type="number"
               className="input"
               placeholder="Minimum Amount"
-              onChange="setMinAmount(event.target.value)"
+              onChange={(event) => setMinAmount(event.target.value)}
               
             />
           </div>
           <div className="form-group">
             <label className="label">Tier 1 URI</label>
-            <input type="file" className="input" onChange="handletier1URI(event)" />
+            <input type="file" className="input" onChange={(e) => handletier1URI(e)} />
           </div>
           <div className="form-group">
             <label className="label">Tier 2 URI</label>
-            <input type="file" className="input" onChange="handletier2URI(event)" />
+            <input type="file" className="input" onChange={(e) => handletier2URI(e)} />
           </div>
           <div className="form-group">
             <label className="label">Tier 3 URI</label>
-            <input type="file" className="input" onChange="handletier3URI(event)" />
+            <input type="file" className="input" onChange={(e) => handletier3URI(e)} />
           </div>
           <div className="form-actions">
             <button type="button" className="btn-cancel">Cancel</button>
