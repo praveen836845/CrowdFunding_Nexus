@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Sidebar } from "react-pro-sidebar";
-import NFTprofile from "../../assets/images/NFTbackgrounfSocialImpact.png";
 
 import { useNavigate } from "react-router-dom";
 
 import './index.css';
 
-import { Button, Img, Input, Line, List, Text } from "components";
+import { Button, Img, Text } from "components";
+import { uploadFile } from "utils/upload";
 
 const ShopInfoForm = ({ onSubmit }) => {
   const [owner, setOwner] = useState("");
@@ -16,11 +16,17 @@ const ShopInfoForm = ({ onSubmit }) => {
   const [deadline, setDeadline] = useState("");
   const [minAmount, setMinAmount] = useState("");
   const [image, setImage] = useState("");
+  const [tier1Image, setTier1Image] = useState("");
+  const [tier2Image, setTier2Image] = useState("");
+  const [tier3Image, setTier3Image] = useState("");
+
+  const [imageURI, setImageURI] = useState("");
   const [tier1URI, setTier1URI] = useState("");
   const [tier2URI, setTier2URI] = useState("");
   const [tier3URI, setTier3URI] = useState("");
 
-  
+
+  const GATEWAY = "gateway.pinata.cloud";
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -32,25 +38,25 @@ const ShopInfoForm = ({ onSubmit }) => {
   const handletier1URI = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setTier1URI(file);
+      setTier1Image(file);
     }
   };
 
   const handletier2URI = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setTier2URI(file);
+      setTier2Image(file);
     }
   };
 
   const handletier3URI = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setTier3URI(file);
+      setTier3Image(file);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("checking that values is appear or not" , e)
     console.log("checking that values is appear or not" , owner)
@@ -60,10 +66,25 @@ const ShopInfoForm = ({ onSubmit }) => {
     console.log("checking that values is appear or not" , deadline)
     console.log("checking that values is appear or not" , minAmount)
     console.log("checking that values is appear or not" , image)
-    console.log("checking that values is appear or not" , tier1URI)
-    console.log("checking that values is appear or not" , tier2URI)
-    console.log("checking that values is appear or not" , tier3URI)
+    console.log("checking that values is appear or not" , tier1Image)
+    console.log("checking that values is appear or not" , tier2Image)
+    console.log("checking that values is appear or not" , tier3Image)
 
+    if (!owner || !title || !description || !target || !deadline || !minAmount || !image || !tier1Image || !tier2Image || !tier3Image) {
+      alert("Please fill all the fields");
+      return;
+    }
+
+    console.log("Upload file to ipfs");
+    const imageIPFS = await uploadFile(image);
+    setImageURI(`https://${GATEWAY}/ipfs/${imageIPFS}`);
+    const tier1IPFS = await uploadFile(tier1Image);
+    setTier1URI(`https://${GATEWAY}/ipfs/${tier1IPFS}`);
+    const tier2IPFS = await uploadFile(tier2Image);
+    setTier2URI(`https://${GATEWAY}/ipfs/${tier2IPFS}`);
+    const tier3IPFS = await uploadFile(tier3Image);
+    setTier3URI(`https://${GATEWAY}/ipfs/${tier3IPFS}`);
+    console.log("Upload file to ipfs");
   };
 
   const navigate = useNavigate();
