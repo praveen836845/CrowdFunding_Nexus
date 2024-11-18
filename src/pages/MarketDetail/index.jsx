@@ -70,7 +70,7 @@ const MarketDetailPage = () => {
                       </Text>
                     </div>
                   </div>
-                  <div
+                  {/* <div
                     className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
                     onClick={() => navigate("/message")}
                   >
@@ -87,8 +87,8 @@ const MarketDetailPage = () => {
                         Message
                       </Text>
                     </div>
-                  </div>
-                  <div
+                  </div> */}
+                  {/* <div
                     className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
                     onClick={() => navigate("/settings")}
                   >
@@ -105,7 +105,7 @@ const MarketDetailPage = () => {
                         Settings
                       </Text>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="flex flex-col gap-4 justify-start w-full">
@@ -135,7 +135,7 @@ const MarketDetailPage = () => {
                     className="common-pointer flex flex-col font-urbanist items-start justify-start p-2.5 w-full"
                     onClick={() => navigate("/activebid")}
                   >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-1/2 md:w-full">
+                    {/* <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-1/2 md:w-full">
                       <Img
                         className="h-6 w-6"
                         src="images/img_judge.svg"
@@ -147,9 +147,9 @@ const MarketDetailPage = () => {
                       >
                         Active Bid
                       </Text>
-                    </div>
+                    </div> */}
                   </div>
-                  <div
+                  {/* <div
                     className="common-pointer flex flex-col font-urbanist items-start justify-start p-2.5 w-full"
                     onClick={() => navigate("/saved")}
                   >
@@ -166,7 +166,7 @@ const MarketDetailPage = () => {
                         Saved
                       </Text>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="flex flex-col gap-4 justify-start w-full">
@@ -176,7 +176,7 @@ const MarketDetailPage = () => {
                 >
                   MY PROFILE
                 </Text>
-                <div className="flex flex-col gap-2 items-center justify-start w-full">
+                {/* <div className="flex flex-col gap-2 items-center justify-start w-full">
                   <div
                     className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
                     onClick={() => navigate("/myprofilecollection")}
@@ -231,7 +231,7 @@ const MarketDetailPage = () => {
                       </Text>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="font-urbanist h-[258px] md:h-[263px] mb-[17px] ml-4 md:ml-[0] relative w-[88%]">
@@ -386,7 +386,7 @@ const MarketDetailPage = () => {
                 alt="Rectangle2054"
               />
               <div className="flex flex-col items-start justify-start">
-                <div className="flex flex-col gap-5 items-start justify-start w-full">
+                <div className="pl-10 Dashflex flex-col gap-4 items-start justify-start w-full">
                   <Text
                     className="md:text-3xl sm:text-[28px] text-[32px] text-black-900 tracking-[0.32px]"
                     size="txtUrbanistSemiBold32Black900"
@@ -402,7 +402,7 @@ const MarketDetailPage = () => {
                     unsuccessful endovascular repair; tube prosthesis...
                   </Text>
                 </div>
-                <List
+                {/* <List
                   className="sm:flex-col flex-row gap-8 grid grid-cols-2 mt-5 w-[70%]"
                   orientation="horizontal"
                 >
@@ -454,9 +454,9 @@ const MarketDetailPage = () => {
                       </Text>
                     </div>
                   </div>
-                </List>
+                </List> */}
                 <Line className="bg-gray-100 h-[1.5px] mt-5 w-full" />
-                <div className="flex flex-row gap-10 items-start justify-start mt-[21px] pr-1 w-[68%] md:w-full">
+                <div className="pl-10 flex flex-row gap-10 items-start justify-start mt-[21px] pr-1 w-[68%] md:w-full">
                   <div className="flex flex-col gap-3.5 items-start justify-start w-[52%]">
                     <Text
                       className="text-base text-gray-500_ab tracking-[0.16px]"
@@ -526,7 +526,7 @@ const MarketDetailPage = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-row gap-3.5 items-center justify-start mt-[37px] w-[56%] md:w-full">
+                <div className="ml-10 flex flex-row gap-3.5 items-center justify-start mt-[37px] w-[56%] md:w-full">
                   <Button
                     className="flex h-[50px] items-center justify-center rounded-lg w-[50px]"
                     shape="round"

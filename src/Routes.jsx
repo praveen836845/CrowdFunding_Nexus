@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import NotFound from "pages/NotFound";
+import { CampaignProvider } from "pages/CampaignProvider";
+import CardView from "pages/CardView/CardView";
 const MyProfileHistory = React.lazy(() => import("pages/MyProfileHistory"));
 const MyProfileWallet = React.lazy(() => import("pages/MyProfileWallet"));
 const MyProfileCollection = React.lazy(() =>
@@ -20,6 +22,7 @@ const Createcampaign = React.lazy(() => import("pages/Createcampaign"));
 const ProjectRoutes = () => {
   return (
     <React.Suspense fallback={<>Loading...</>}>
+      <CampaignProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Dashboard />} />
@@ -28,6 +31,8 @@ const ProjectRoutes = () => {
           <Route path="/settings" element={<Settings />} />
           <Route path="/market" element={<Market />} />
           <Route path="/marketdetail" element={<MarketDetail />} />
+          <Route path="/card-view" element={<CardView />} />
+          {/* <Route path="/card_view/:tier" element={<MarketDetail />} /> */}
           <Route path="/otheruserprofile" element={<OtherUserProfile />} />
           <Route path="/activebid" element={<ActiveBid />} />
           <Route path="/saved" element={<Saved />} />
@@ -42,6 +47,7 @@ const ProjectRoutes = () => {
          
         </Routes>
       </Router>
+      </CampaignProvider>
     </React.Suspense>
   );
 };

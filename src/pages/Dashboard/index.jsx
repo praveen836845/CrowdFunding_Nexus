@@ -1,20 +1,25 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import CreateCampaign from "pages/Createcampaign";
 //import Modal from "../../components/Modal";
 import WalletButton from "pages/Walletconnect";
-
 import { Sidebar } from "react-pro-sidebar";
 import { useNavigate } from "react-router-dom";
-
 import { Button, Img, Input, Line, List, Text } from "components";
-import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from "wagmi";
-import {CrowdFundingABI} from '../../abi/constants'
-import {CrowdFundingAddress} from '../../abi/constants'
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+  useReadContract,
+} from "wagmi";
+import { CrowdFundingABI } from "../../abi/constants";
+import { CrowdFundingAddress } from "../../abi/constants";
 import { CloseSVG } from "../../assets/images";
-import NFTbackground from "../../assets/images/NFTbackgrounfSocialImpact.png"
+import NFTbackground from "../../assets/images/NFTbackgrounfSocialImpact.png";
 
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { formatUnits , parseEther } from "ethers";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { formatUnits, parseEther } from "ethers";
+import { Link } from "react-router-dom";
+import { useCampaignContext } from "pages/CampaignProvider";
 
 const campaigns = [
   { id: 1, name: "Save the Oceans" },
@@ -25,41 +30,45 @@ const campaigns = [
   { id: 6, name: "Health Care for Rural Areas" },
 ];
 
-
 const DashboardPage = ({ onSubmit }) => {
   const navigate = useNavigate();
-  const {writeContractAsync , isPending} = useWriteContract();
+  const { writeContractAsync, isPending } = useWriteContract();
   const [searchinputvalue, setSearchinputvalue] = React.useState("");
   const { address, isConnected } = useAccount(); // This is the client address
+  const [card, setCard] = useState(false);
 
-const [donation , setdonation] = useState([])
+  const [donation, setdonation] = useState([]);
   const [campaignData, setCampaignData] = useState([]);
-  const CONTRACT_ADDRESS = CrowdFundingAddress
+  const CONTRACT_ADDRESS = CrowdFundingAddress;
 
   // Adding this data to the
-  const { data, isError, isLoading: contractLoading } = useReadContract({
+  const {
+    data,
+    isError,
+    isLoading: contractLoading,
+  } = useReadContract({
     address: CONTRACT_ADDRESS,
     abi: CrowdFundingABI,
-    functionName: 'getCampaigns'
+    functionName: "getCampaigns",
   });
 
-  const donationsData =  useReadContract({
-          address: CONTRACT_ADDRESS,
-          abi: CrowdFundingABI,
-          functionName: 'getDonations',
-          args: [address]
-        })
-console.log(">>>> getDonationdata" , donationsData);
+  const donationsData = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: CrowdFundingABI,
+    functionName: "getDonations",
+    args: [address],
+  });
+  console.log(">>>> getDonationdata", donationsData);
   async function fetchFileFromIPFS(url) {
     // const url = `https://${GATEWAY}/ipfs/${cid}`;
     try {
       const request = await fetch(url);
       const contentType = request.headers.get("content-type");
-  
+
       if (contentType.includes("application/json")) {
         return await request.json();
       } else if (contentType.includes("image")) {
-        return url; 
+        return url;
       } else {
         return await request.text();
       }
@@ -69,24 +78,27 @@ console.log(">>>> getDonationdata" , donationsData);
     }
   }
 
+  const handalerCardView = ()=>{
+      setCard(true);
+  }
+
+
   useEffect(() => {
-    if (!data) return; // Avoid redundant fetches.
-  
+    if (!data) return; 
+
     async function processCampaigns() {
       try {
-        setCampaignData(data); // Update state
-        setdonation(donationsData.data)
+        setCampaignData(data); 
+        setdonation(donationsData.data);
       } catch (error) {
         console.error("Error processing campaigns:", error);
       }
     }
-  
+
     processCampaigns();
-  }, [data , donationsData]);
-  
-  
-console.log("donations" , donation)
-  // Function to convert seconds to "h m s" format
+  }, [data, donationsData, card]);
+
+  console.log("donations", donation);
   const formatTime = (seconds) => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
@@ -114,14 +126,49 @@ console.log("donations" , donation)
   //   return () => clearInterval(timer);
   // }, []);
 
-  console.log(">>>campigndata" , campaignData)
+  console.log(">>>campigndata", campaignData);
   //NFts Ranking
   const users = [
-    { id: 1, name: 'Doodle Lucu', avatar: 'images/img_ellipse1018.png', donation: 14.32, nfts: 10, campaigns: 18 },
-    { id: 2, name: 'Kimawi Genesis', avatar: 'images/img_ellipse1018_42X42.png',  donation: 6.11, nfts: 8, campaigns: 21 },
-    { id: 3, name: 'Crypto Kitty', avatar: 'images/img_ellipse1019.png',  donation: 20.55, nfts: 15, campaigns: 12 },
-    { id: 4, name: 'Art Collection', avatar: 'images/img_ellipse1020.png', donation: 10.11, nfts: 12, campaigns: 5 },
-    { id: 5, name: 'Galaxy Hoppers', avatar: 'images/img_ellipse1021.png',  donation: 5.33, nfts: 9, campaigns: 16 },
+    {
+      id: 1,
+      name: "Doodle Lucu",
+      avatar: "images/img_ellipse1018.png",
+      donation: 14.32,
+      nfts: 10,
+      campaigns: 18,
+    },
+    {
+      id: 2,
+      name: "Kimawi Genesis",
+      avatar: "images/img_ellipse1018_42X42.png",
+      donation: 6.11,
+      nfts: 8,
+      campaigns: 21,
+    },
+    {
+      id: 3,
+      name: "Crypto Kitty",
+      avatar: "images/img_ellipse1019.png",
+      donation: 20.55,
+      nfts: 15,
+      campaigns: 12,
+    },
+    {
+      id: 4,
+      name: "Art Collection",
+      avatar: "images/img_ellipse1020.png",
+      donation: 10.11,
+      nfts: 12,
+      campaigns: 5,
+    },
+    {
+      id: 5,
+      name: "Galaxy Hoppers",
+      avatar: "images/img_ellipse1021.png",
+      donation: 5.33,
+      nfts: 9,
+      campaigns: 16,
+    },
     // Add more users if necessary
   ];
 
@@ -206,7 +253,6 @@ console.log("donations" , donation)
     },
   ];
 
-  
   //search bar
 
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -229,33 +275,51 @@ console.log("donations" , donation)
 
   const handleNavigate = () => {
     navigate("/create-campaign");
-  }
-
-  const HandleDonateClick = async (campaignId) => {
-    console.log(`Button clicked for campaign ID: ${campaignId}`);
-    const donationAmount = prompt("Enter the amount to donate (in ETH):");
-  
-  // Ensure the user entered a valid number
-  if (!donationAmount || isNaN(donationAmount) || parseFloat(donationAmount) <= 0) {
-    alert("Please enter a valid donation amount.");
-    return;
-  }
-
-    try {
-      const hash = await writeContractAsync({
-        address: CONTRACT_ADDRESS,
-        abi: CrowdFundingABI,
-        functionName: 'donateToCampaign',
-        args: [campaignId],
-        value: parseEther(donationAmount),
-      });
-      console.log("Donated Successfully: ", hash);
-      
-    } catch (error) {
-      console.error("Error donating to campaign: ", error);
-    }
   };
-  
+
+  // const [{ tiers: [{ threshold }] }] = campaignData;
+
+  // console.log("navigate",threshold);
+
+  const handleshowCampaign = () => {
+    navigate("/marketdetail_view");
+  };
+
+  // const HandleDonateClick = async (campaignId) => {
+  //   console.log(`Button clicked for campaign ID: ${campaignId}`);
+  //   const donationAmount = prompt("Enter the amount to donate (in ETH):");
+
+  //   // Ensure the user entered a valid number
+  //   if (
+  //     !donationAmount ||
+  //     isNaN(donationAmount) ||
+  //     parseFloat(donationAmount) <= 0
+  //   ) {
+  //     alert("Please enter a valid donation amount.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const hash = await writeContractAsync({
+  //       address: CONTRACT_ADDRESS,
+  //       abi: CrowdFundingABI,
+  //       functionName: "donateToCampaign",
+  //       args: [campaignId],
+  //       value: parseEther(donationAmount),
+  //     });
+  //     console.log("Donated Successfully: ", hash);
+  //   } catch (error) {
+  //     console.error("Error donating to campaign: ", error);
+  //   }
+  // };
+
+  // const handleShowClick = () => {
+  //   // Pass the campaign data through state when navigating to the CardView page
+  //   navigate(`/card_view/${campaignData.title}`, { state: { campaignData } });
+  // };
+
+  const { setCampaign } = useCampaignContext();
+
 
   return (
     <>
@@ -335,8 +399,6 @@ console.log("donations" , donation)
                       </Text>
                     </div>
                   </div>
-                
-                
                 </div>
               </div>
             </div>
@@ -439,7 +501,7 @@ console.log("donations" , donation)
                   3,421 ETH
                 </div>
               </Button> */}
-              
+
               <Button
                 className="flex h-[52px] items-center justify-center rounded-[50%] w-[52px]"
                 shape="circle"
@@ -483,7 +545,8 @@ console.log("donations" , donation)
                         className="text-sm text-white-A700_a2 tracking-[0.14px]"
                         size="txtUrbanistMedium14"
                       >
-                        Donate to campaigns and receive one of three exclusive NFTs based on your contribution level
+                        Donate to campaigns and receive one of three exclusive
+                        NFTs based on your contribution level
                       </Text>
                     </div>
                     <div className="flex flex-row gap-5 items-center justify-start mb-[19px] w-[39%] md:w-full">
@@ -533,212 +596,301 @@ console.log("donations" , donation)
                   className="sm:flex-col flex-row gap-[19px] grid sm:grid-cols-1 md:grid-cols-2 grid-cols-3 justify-center w-full"
                   orientation="horizontal"
                 >
-            
                   {campaignData.map((campaign, index) => {
-                    const isButtonDisabled = campaign.isEnded || campaign.currentRaised >= campaign.donationTarget;
+                    const isButtonDisabled =
+                      campaign.isEnded ||
+                      campaign.currentRaised >= campaign.donationTarget;
+
+                      const handleCardClick = () => {
+                        setCampaign(campaign); // Store the selected campaign in Context
+                      };
 
                     return (
-                   <div className="bg-white-A700 flex flex-1 flex-col gap-5 items-center justify-start p-1.5 rounded-[15px] shadow-bs1 w-full">
-                    <div
-                      className="bg-cover bg-no-repeat flex flex-col h-[140px] items-end justify-start p-2 rounded-[12px] w-full"
-                      style={{
-                        backgroundImage: `url(${campaign.image})`,
-                      }}
-                    >
-                      <div className="flex flex-row gap-2 items-center justify-end mb-[94px] w-[55%] md:w-full">
-                        <Button
-                          className="cursor-pointer font-medium min-w-[75px] rounded-[14px] text-center text-xs tracking-[0.12px]"
-                          color="gray_900_26"
-                          size="xs"
-                          variant="fill"
+                      <div className="bg-white-A700 flex flex-1 flex-col gap-5 items-center justify-start p-1.5 rounded-[15px] shadow-bs1 w-full">
+                        <div
+                          className="bg-cover bg-no-repeat flex flex-col h-[140px] items-end justify-start p-2 rounded-[12px] w-full"
+                          style={{
+                            backgroundImage: `url(${campaign.image})`,
+                          }}
                         >
-                          {formatTime(campaign.timeLeft)}
-                        </Button>
-                        <Button
-                          className="flex h-[30px] items-center justify-center rounded-[50%] w-[30px]"
-                          shape="circle"
-                          color="gray_900_26"
-                          size="xs"
-                          variant="fill"
-                        >
-                          <Img
-                            className="h-[18px]"
-                            src="images/img_heart.svg"
-                            alt="heart Two"
-                          />
-                        </Button>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-[18px] items-start justify-start mb-3 w-[93%] md:w-full">
-                      <div className="flex flex-col items-start justify-start">
-                        <Text
-                          className="text-base text-black-900 tracking-[0.16px]"
-                          size="txtUrbanistSemiBold16"
-                        >
-                          {campaign.title}
-                        </Text>
-                        <Text
-                          className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
-                          size="txtUrbanistMedium12Gray500"
-                        >
-                          {campaign.creator}
-                        </Text>
-                      </div>
-                      {campaign.isDonation && (
-                          <div className="w-full mt-2">
-                            <Text className="text-[10px] text-gray-500 tracking-[0.10px]" size="txtOutfitRegular10">
-                              Donation Target: {(campaign.currentRaised / campaign.donationTarget)} ETH
-                            </Text>
-                            <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                              <div
-                                className="bg-blue-500 h-2 rounded-full"
-                                style={{
-                                  width: `${(campaign.currentRaised / campaign.donationTarget) * 100}%`,
-                                }}
-                              ></div>
-                            </div>
-                          </div>
-                        )}
-                      <div className="flex flex-row gap-[38px] items-center justify-between w-full">
-                        <div className="flex flex-col font-outfit items-start justify-start">
-                          <Text
-                            className="text-[10px] text-gray-500 tracking-[0.10px]"
-                            size="txtOutfitRegular10"
-                          >
-                            {campaign.isDonation ? "Current Collection" : "Total Collection"}
-                          </Text>
-                          <div className="flex flex-row font-urbanist gap-1.5 items-center justify-start mt-1 w-[98%] md:w-full">
-                            <Img
-                              className="h-4 w-4"
-                              src="images/img_sort.svg"
-                              alt="sort Two"
-                            />
-                            <Text
-                              className="text-black-900 text-sm tracking-[0.14px]"
-                              size="txtUrbanistMedium14Black900"
+                          <div className="flex flex-row gap-2 items-center justify-end mb-[94px] w-[55%] md:w-full">
+                            <Button
+                              className="cursor-pointer font-medium min-w-[75px] rounded-[14px] text-center text-xs tracking-[0.12px]"
+                              color="gray_900_26"
+                              size="xs"
+                              variant="fill"
                             >
-                              {formatUnits(campaign.target).toString()}
-                            </Text>
+                              {formatTime(campaign.timeLeft)}
+                            </Button>
+                            <Button
+                              className="flex h-[30px] items-center justify-center rounded-[50%] w-[30px]"
+                              shape="circle"
+                              color="gray_900_26"
+                              size="xs"
+                              variant="fill"
+                            >
+                              <Img
+                                className="h-[18px]"
+                                src="images/img_heart.svg"
+                                alt="heart Two"
+                              />
+                            </Button>
                           </div>
                         </div>
-                        <Button
-                          className="cursor-pointer font-medium font-urbanist min-w-[88px] rounded-lg text-center text-xs tracking-[0.12px]"
-                          shape="round"
-                          color="gray_900"
-                          size="xs"
-                          variant="fill"
-                          disabled={isButtonDisabled}
-                          onClick={() => HandleDonateClick(index)} 
-                        >
-                          {campaign.isDonation ? "Donate" : "Donate"}
+                        <div className="flex flex-col gap-[18px] items-start justify-start mb-3 w-[93%] md:w-full">
+                          <div className="flex flex-col items-start justify-start">
+                            <Text
+                              className="text-base text-black-900 tracking-[0.16px]"
+                              size="txtUrbanistSemiBold16"
+                            >
+                              {campaign.title}
+                            </Text>
+                            <Text
+                              className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
+                              size="txtUrbanistMedium12Gray500"
+                            >
+                              {campaign.creator}
+                            </Text>
+                          </div>
+                          {campaign.isDonation && (
+                            <div className="w-full mt-2">
+                              <Text
+                                className="text-[10px] text-gray-500 tracking-[0.10px]"
+                                size="txtOutfitRegular10"
+                              >
+                                Donation Target:{" "}
+                                {campaign.currentRaised /
+                                  campaign.donationTarget}{" "}
+                                ETH
+                              </Text>
+                              <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                <div
+                                  className="bg-blue-500 h-2 rounded-full"
+                                  style={{
+                                    width: `${
+                                      (campaign.currentRaised /
+                                        campaign.donationTarget) *
+                                      100
+                                    }%`,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                          )}
+                          <div className="flex flex-row gap-[38px] items-center justify-between w-full">
+                            <div className="flex flex-col font-outfit items-start justify-start">
+                              <Text
+                                className="text-[10px] text-gray-500 tracking-[0.10px]"
+                                size="txtOutfitRegular10"
+                              >
+                                {campaign.isDonation
+                                  ? "Current Collection"
+                                  : "Total Collection"}
+                              </Text>
+                              <div className="flex flex-row font-urbanist gap-1.5 items-center justify-start mt-1 w-[98%] md:w-full">
+                                <Img
+                                  className="h-4 w-4"
+                                  src="images/img_sort.svg"
+                                  alt="sort Two"
+                                />
+                                <Text
+                                  className="text-black-900 text-sm tracking-[0.14px]"
+                                  size="txtUrbanistMedium14Black900"
+                                >
+                                  {formatUnits(campaign.target).toString()}
+                                </Text>
+                              </div>
+                            </div>
 
-                        </Button>
+                            <Link to={"/card-view"}>
+                              <Button
+                                className="cursor-pointer font-medium font-urbanist min-w-[88px] rounded-lg text-center text-xs tracking-[0.12px]"
+                                shape="round"
+                                color="gray_900"
+                                size="xs"
+                                variant="fill"
+                                disabled={isButtonDisabled}
+                                // onClick={handleShowClick}
+                                onClick={handleCardClick}
+                                
+                                // onClick={() => HandleDonateClick(index)}
+                              >
+                                {/* {campaign.isDonation ? "Donate" : "Donate"} */}
+                                Show
+                              </Button>
+                            </Link>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div> 
                     );
-                })}
+                  })}
                 </List>
               </div>
               <div className="flex flex-col gap-5 items-center justify-start mt-[30px] w-full">
-            <div className="flex flex-row sm:gap-10 items-center justify-between w-full">
-              <Text className="text-2xl md:text-[22px] text-black-900 sm:text-xl" size="txtUrbanistSemiBold24">
-                NFT Rankings
-              </Text>
-              {/* <Text
+                <div className="flex flex-row sm:gap-10 items-center justify-between w-full">
+                  <Text
+                    className="text-2xl md:text-[22px] text-black-900 sm:text-xl"
+                    size="txtUrbanistSemiBold24"
+                  >
+                    NFT Rankings
+                  </Text>
+                  {/* <Text
                 onClick={loadMoreUsers}
                 className="text-gray-900 text-sm tracking-[0.14px] cursor-pointer"
                 size="txtUrbanistMedium14Gray900"
               >
                 View All
               </Text> */}
-            </div>
-            <div className="flex flex-col gap-5 items-center justify-start w-full">
-              <div className="flex sm:flex-col flex-row sm:gap-10 items-start justify-between pb-0.5 w-full">
-                <Text className="text-gray-500 text-xs tracking-[0.12px]" size="txtUrbanistMedium12Gray500">
-                  User
-                </Text>
-                <div className="flex sm:flex-1 flex-row items-start justify-between w-[66%] sm:w-full">
-                  <Text className="text-gray-500 text-xs tracking-[0.12px]" size="txtUrbanistMedium12Gray500">
-                    Donation
-                  </Text>
-                  <Text className="text-gray-500 text-xs tracking-[0.12px]" size="txtUrbanistMedium12Gray500">
-                    NFTs
-                  </Text>
-                  <Text className="text-gray-500 text-xs tracking-[0.12px]" size="txtUrbanistMedium12Gray500">
-                    Campaigns
-                  </Text>
+                </div>
+                <div className="flex flex-col gap-5 items-center justify-start w-full">
+                  <div className="flex sm:flex-col flex-row sm:gap-10 items-start justify-between pb-0.5 w-full">
+                    <Text
+                      className="text-gray-500 text-xs tracking-[0.12px]"
+                      size="txtUrbanistMedium12Gray500"
+                    >
+                      User
+                    </Text>
+                    <div className="flex sm:flex-1 flex-row items-start justify-between w-[66%] sm:w-full">
+                      <Text
+                        className="text-gray-500 text-xs tracking-[0.12px]"
+                        size="txtUrbanistMedium12Gray500"
+                      >
+                        Donation
+                      </Text>
+                      <Text
+                        className="text-gray-500 text-xs tracking-[0.12px]"
+                        size="txtUrbanistMedium12Gray500"
+                      >
+                        NFTs
+                      </Text>
+                      <Text
+                        className="text-gray-500 text-xs tracking-[0.12px]"
+                        size="txtUrbanistMedium12Gray500"
+                      >
+                        Campaigns
+                      </Text>
+                    </div>
+                  </div>
+                  <div className="overflow-y-auto max-h-[400px] w-full">
+                    {" "}
+                    {/* Scrollable list */}
+                    <List
+                      className="flex flex-col items-center pr-[7px] w-full"
+                      orientation="vertical"
+                    >
+                      {displayUsers.map((user) => (
+                        <div
+                          key={user.id}
+                          className="flex flex-1 md:flex-col flex-row md:gap-10 items-center justify-between w-full"
+                        >
+                          <div className="flex md:flex-1 flex-row gap-3.5 items-center justify-between w-[21%] md:w-full">
+                            <Img
+                              className="h-[42px] md:h-auto rounded-[50%] w-[42px]"
+                              src={user.avatar}
+                              alt={user.name}
+                            />
+                            <div className="flex flex-col items-start justify-start">
+                              <Text
+                                className="text-base text-black-900 tracking-[0.16px]"
+                                size="txtUrbanistSemiBold16"
+                              >
+                                {user.name}
+                              </Text>
+                            </div>
+                          </div>
+                          <div className="flex md:flex-1 sm:flex-col flex-row sm:gap-5 items-center justify-between w-[55%] md:w-full">
+                            <div className="flex flex-row font-urbanist items-center justify-evenly w-[11%] sm:w-full">
+                              <Img
+                                className="h-4 w-4"
+                                src="images/img_sort.svg"
+                                alt="sort Three"
+                              />
+                              <Text
+                                className="text-black-900 text-sm tracking-[0.14px]"
+                                size="txtUrbanistMedium14Black900"
+                              >
+                                {user.donation}
+                              </Text>
+                            </div>
+                            <div className="flex flex-row font-urbanist items-center justify-end sm:ml-[0] ml-[53px] w-[9%] sm:w-full">
+                              <Img
+                                className="h-4 w-4"
+                                src="images/img_sort.svg"
+                                alt="sort One"
+                              />
+                              <Text
+                                className="h-[18px] ml-1 text-black-900 text-sm tracking-[0.14px]"
+                                size="txtUrbanistMedium14Black900"
+                              >
+                                {user.nfts}
+                              </Text>
+                            </div>
+                            <Text
+                              className="sm:ml-[0] ml-[85px] text-black-900 text-sm tracking-[0.14px]"
+                              size="txtUrbanistMedium14Black900"
+                            >
+                              {user.campaigns}
+                            </Text>
+                          </div>
+                        </div>
+                      ))}
+                    </List>
+                  </div>
                 </div>
               </div>
-              <div className="overflow-y-auto max-h-[400px] w-full"> {/* Scrollable list */}
-                <List className="flex flex-col items-center pr-[7px] w-full" orientation="vertical">
-                  {displayUsers.map((user) => (
-                    <div key={user.id} className="flex flex-1 md:flex-col flex-row md:gap-10 items-center justify-between w-full">
-                      <div className="flex md:flex-1 flex-row gap-3.5 items-center justify-between w-[21%] md:w-full">
-                        <Img className="h-[42px] md:h-auto rounded-[50%] w-[42px]" src={user.avatar} alt={user.name} />
-                        <div className="flex flex-col items-start justify-start">
-                          <Text className="text-base text-black-900 tracking-[0.16px]" size="txtUrbanistSemiBold16">
-                            {user.name}
-                          </Text>
-                          
-                        </div>
-                      </div>
-                      <div className="flex md:flex-1 sm:flex-col flex-row sm:gap-5 items-center justify-between w-[55%] md:w-full">
-                        <div className="flex flex-row font-urbanist items-center justify-evenly w-[11%] sm:w-full">
-                          <Img className="h-4 w-4" src="images/img_sort.svg" alt="sort Three" />
-                          <Text className="text-black-900 text-sm tracking-[0.14px]" size="txtUrbanistMedium14Black900">
-                            {user.donation}
-                          </Text>
-                        </div>
-                        <div className="flex flex-row font-urbanist items-center justify-end sm:ml-[0] ml-[53px] w-[9%] sm:w-full">
-                          <Img className="h-4 w-4" src="images/img_sort.svg" alt="sort One" />
-                          <Text className="h-[18px] ml-1 text-black-900 text-sm tracking-[0.14px]" size="txtUrbanistMedium14Black900">
-                            {user.nfts}
-                          </Text>
-                        </div>
-                        <Text className="sm:ml-[0] ml-[85px] text-black-900 text-sm tracking-[0.14px]" size="txtUrbanistMedium14Black900">
-                          {user.campaigns}
-                        </Text>
-                      </div>
-                    </div>
-                  ))}
-                </List>
-              </div>
-            </div>
-          </div>
             </div>
             <div className="bg-white-A700 flex flex-col gap-10 items-center justify-start outline outline-gray-100 p-[26px] sm:px-5 w-[30%] md:w-full">
               <div className="flex flex-col gap-5 items-center justify-start mb-[15px] pt-[3px] w-full">
-      {/* Header */}
-      <div className="flex flex-row items-start justify-between w-full">
-        <Text className="text-black-900 text-lg font-bold" size="txtUrbanistSemiBold18Black900">
-          Recent Donations
-        </Text>
-        <Text className="mb-0.5 text-gray-900 text-sm tracking-[0.14px] cursor-pointer hover:text-blue-500 transition duration-300" size="txtUrbanistMedium14Gray900">
-          See All
-        </Text>
-      </div>
+                {/* Header */}
+                <div className="flex flex-row items-start justify-between w-full">
+                  <Text
+                    className="text-black-900 text-lg font-bold"
+                    size="txtUrbanistSemiBold18Black900"
+                  >
+                    Recent Donations
+                  </Text>
+                  <Text
+                    className="mb-0.5 text-gray-900 text-sm tracking-[0.14px] cursor-pointer hover:text-blue-500 transition duration-300"
+                    size="txtUrbanistMedium14Gray900"
+                  >
+                    See All
+                  </Text>
+                </div>
 
-      {/* Donation List */}
-      <div className="flex flex-col gap-5 items-center w-full bg-white shadow-lg rounded-lg p-5">
-        {dummyDonators.map((donator, index) => (
-          <div key={index} className="flex flex-row items-center justify-between w-full p-3 border-b last:border-b-0 hover:bg-gray-100 transition duration-200">
-            <div className="flex flex-row gap-4 items-center">
-              <Img className="h-10 w-10 rounded-full" src={dummyDonators[index].avatar } alt={`${dummyDonators[index].name} avatar`} />
-              <div className="flex flex-col">
-                <Text className="text-lg font-semibold text-black-900">{donator.campaignName}</Text>
-                <Text className="text-sm text-gray-500">{dummyDonators[index].origin}</Text>
+                {/* Donation List */}
+                <div className="flex flex-col gap-5 items-center w-full bg-white shadow-lg rounded-lg p-5">
+                  {dummyDonators.map((donator, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-row items-center justify-between w-full p-3 border-b last:border-b-0 hover:bg-gray-100 transition duration-200"
+                    >
+                      <div className="flex flex-row gap-4 items-center">
+                        <Img
+                          className="h-10 w-10 rounded-full"
+                          src={dummyDonators[index].avatar}
+                          alt={`${dummyDonators[index].name} avatar`}
+                        />
+                        <div className="flex flex-col">
+                          <Text className="text-lg font-semibold text-black-900">
+                            {donator.campaignName}
+                          </Text>
+                          <Text className="text-sm text-gray-500">
+                            {dummyDonators[index].origin}
+                          </Text>
+                        </div>
+                      </div>
+                      <div className="flex flex-row items-center text-sm text-black-900 font-medium">
+                        <Img
+                          className="h-5 w-5 mr-2"
+                          src="images/img_sort.svg"
+                          alt="sort icon"
+                        />
+                        {/* {donator} */}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="flex flex-row items-center text-sm text-black-900 font-medium">
-              <Img className="h-5 w-5 mr-2" src="images/img_sort.svg" alt="sort icon" />
-              {/* {donator} */}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-              
             </div>
           </div>
         </div>
