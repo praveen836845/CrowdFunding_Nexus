@@ -14,6 +14,7 @@ import { CloseSVG } from "../../assets/images";
 import NFTbackground from "../../assets/images/NFTbackgrounfSocialImpact.png"
 
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { formatUnits , parseEther } from "ethers";
 
 const campaigns = [
   { id: 1, name: "Save the Oceans" },
@@ -27,9 +28,11 @@ const campaigns = [
 
 const DashboardPage = ({ onSubmit }) => {
   const navigate = useNavigate();
-
+  const {writeContractAsync , isPending} = useWriteContract();
   const [searchinputvalue, setSearchinputvalue] = React.useState("");
+  const { address, isConnected } = useAccount(); // This is the client address
 
+const [donation , setdonation] = useState([])
   const [campaignData, setCampaignData] = useState([]);
   const CONTRACT_ADDRESS = CrowdFundingAddress
 
@@ -39,7 +42,14 @@ const DashboardPage = ({ onSubmit }) => {
     abi: CrowdFundingABI,
     functionName: 'getCampaigns'
   });
-console.log(">>>> getCampaign" , data)
+
+  const donationsData =  useReadContract({
+          address: CONTRACT_ADDRESS,
+          abi: CrowdFundingABI,
+          functionName: 'getDonations',
+          args: [address]
+        })
+console.log(">>>> getDonationdata" , donationsData);
   async function fetchFileFromIPFS(url) {
     // const url = `https://${GATEWAY}/ipfs/${cid}`;
     try {
@@ -65,16 +75,17 @@ console.log(">>>> getCampaign" , data)
     async function processCampaigns() {
       try {
         setCampaignData(data); // Update state
+        setdonation(donationsData.data)
       } catch (error) {
         console.error("Error processing campaigns:", error);
       }
     }
   
     processCampaigns();
-  }, [data]);
+  }, [data , donationsData]);
   
   
-
+console.log("donations" , donation)
   // Function to convert seconds to "h m s" format
   const formatTime = (seconds) => {
     const h = Math.floor(seconds / 3600);
@@ -219,6 +230,31 @@ console.log(">>>> getCampaign" , data)
   const handleNavigate = () => {
     navigate("/create-campaign");
   }
+
+  const HandleDonateClick = async (campaignId) => {
+    console.log(`Button clicked for campaign ID: ${campaignId}`);
+    const donationAmount = prompt("Enter the amount to donate (in ETH):");
+  
+  // Ensure the user entered a valid number
+  if (!donationAmount || isNaN(donationAmount) || parseFloat(donationAmount) <= 0) {
+    alert("Please enter a valid donation amount.");
+    return;
+  }
+
+    try {
+      const hash = await writeContractAsync({
+        address: CONTRACT_ADDRESS,
+        abi: CrowdFundingABI,
+        functionName: 'donateToCampaign',
+        args: [campaignId],
+        value: parseEther(donationAmount),
+      });
+      console.log("Donated Successfully: ", hash);
+      
+    } catch (error) {
+      console.error("Error donating to campaign: ", error);
+    }
+  };
   
 
   return (
@@ -299,113 +335,10 @@ console.log(">>>> getCampaign" , data)
                       </Text>
                     </div>
                   </div>
-                  {/* <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/activebid")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-1/2 md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_judge.svg"
-                        alt="judge"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/activebid")}
-                      >
-                        Active Bid
-                      </Text>
-                    </div>
-                  </div> */}
-                  {/* <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/saved")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[39%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_clock.svg"
-                        alt="clock"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/saved")}
-                      >
-                        Saved
-                      </Text>
-                    </div>
-                  </div> */}
+                
+                
                 </div>
               </div>
-              {/* <div className="flex flex-col gap-4 justify-start w-full">
-                <Text
-                  className="ml-4 md:ml-[0] text-gray-901 text-xs tracking-[0.12px]"
-                  size="txtUrbanistMedium12Gray901"
-                >
-                  MY PROFILE
-                </Text>
-                <div className="flex flex-col gap-2 items-center justify-start w-full">
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/myprofilecollection")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-1/2 md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_user_24X24.svg"
-                        alt="user One"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/myprofilecollection")}
-                      >
-                        Collection
-                      </Text>
-                    </div>
-                  </div>
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/myprofilewallet")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[38%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_computer.svg"
-                        alt="computer"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/myprofilewallet")}
-                      >
-                        Wallet
-                      </Text>
-                    </div>
-                  </div>
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/myprofilehistory")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-2/5 md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_clock_24X24.svg"
-                        alt="clock One"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/myprofilehistory")}
-                      >
-                        History
-                      </Text>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
             </div>
             <div className="font-urbanist h-[258px] md:h-[263px] mb-[17px] ml-4 md:ml-[0] relative w-[88%]">
               <div className="absolute bg-gray-900 bottom-[0] h-[233px] inset-x-[0] mx-auto rounded-[15px] w-[234px]"></div>
@@ -654,7 +587,7 @@ console.log(">>>> getCampaign" , data)
                       {campaign.isDonation && (
                           <div className="w-full mt-2">
                             <Text className="text-[10px] text-gray-500 tracking-[0.10px]" size="txtOutfitRegular10">
-                              Donation Target: {campaign.currentRaised} / {campaign.donationTarget} ETH
+                              Donation Target: {(campaign.currentRaised / campaign.donationTarget)} ETH
                             </Text>
                             <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                               <div
@@ -684,7 +617,7 @@ console.log(">>>> getCampaign" , data)
                               className="text-black-900 text-sm tracking-[0.14px]"
                               size="txtUrbanistMedium14Black900"
                             >
-                              {campaign.currentRaised}
+                              {formatUnits(campaign.target).toString()}
                             </Text>
                           </div>
                         </div>
@@ -695,8 +628,10 @@ console.log(">>>> getCampaign" , data)
                           size="xs"
                           variant="fill"
                           disabled={isButtonDisabled}
+                          onClick={() => HandleDonateClick(index)} 
                         >
                           {campaign.isDonation ? "Donate" : "Donate"}
+
                         </Button>
                       </div>
                     </div>
@@ -710,13 +645,13 @@ console.log(">>>> getCampaign" , data)
               <Text className="text-2xl md:text-[22px] text-black-900 sm:text-xl" size="txtUrbanistSemiBold24">
                 NFT Rankings
               </Text>
-              <Text
+              {/* <Text
                 onClick={loadMoreUsers}
                 className="text-gray-900 text-sm tracking-[0.14px] cursor-pointer"
                 size="txtUrbanistMedium14Gray900"
               >
                 View All
-              </Text>
+              </Text> */}
             </div>
             <div className="flex flex-col gap-5 items-center justify-start w-full">
               <div className="flex sm:flex-col flex-row sm:gap-10 items-start justify-between pb-0.5 w-full">
@@ -773,320 +708,6 @@ console.log(">>>> getCampaign" , data)
           </div>
             </div>
             <div className="bg-white-A700 flex flex-col gap-10 items-center justify-start outline outline-gray-100 p-[26px] sm:px-5 w-[30%] md:w-full">
-              {/* <div className="flex flex-col gap-5 items-center justify-start mt-3.5 w-full">
-                <div className="flex flex-row items-start justify-between w-full">
-                  <Text
-                    className="text-black-900 text-lg"
-                    size="txtUrbanistSemiBold18Black900"
-                  >
-                    Featured Creators
-                  </Text>
-                  <Text
-                    className="mt-0.5 text-gray-900 text-sm tracking-[0.14px]"
-                    size="txtUrbanistMedium14Gray900"
-                  >
-                    See All
-                  </Text>
-                </div>
-                <div className="bg-white-A700 flex flex-col gap-3 items-center justify-start p-1.5 rounded-[15px] shadow-bs2 w-full">
-                  <div className="flex flex-col relative w-full">
-                    <Img
-                      className="h-[120px] mx-auto object-cover rounded-[12px] w-full"
-                      src="images/img_rectangle2043.png"
-                      alt="Rectangle2043"
-                    />
-                    <Img
-                      className="h-[52px] mt-[-26px] mx-auto rounded-[50%] w-[52px] z-[1]"
-                      src="images/img_ellipse1019.png"
-                      alt="Ellipse1019"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-3 items-center justify-start mb-2 w-[94%] md:w-full">
-                    <div className="flex flex-row items-center justify-between w-full">
-                      <div className="flex flex-col font-urbanist items-start justify-start">
-                        <div className="flex flex-row items-center justify-evenly w-full">
-                          <Text
-                            className="text-black-900 text-sm tracking-[0.14px]"
-                            size="txtUrbanistSemiBold14"
-                          >
-                            Murakami Flowers
-                          </Text>
-                          <Img
-                            className="h-[18px] w-[18px]"
-                            src="images/img_checkmark.svg"
-                            alt="checkmark"
-                          />
-                        </div>
-                        <Text
-                          className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
-                          size="txtUrbanistMedium12Gray500"
-                        >
-                          @mftmkkus
-                        </Text>
-                      </div>
-                      <Button
-                        className="cursor-pointer font-outfit min-w-[64px] my-[5px] rounded-[14px] text-center text-xs tracking-[0.12px]"
-                        color="gray_900"
-                        size="xs"
-                        variant="fill"
-                      >
-                        Follow
-                      </Button>
-                    </div>
-                    <Line className="bg-gray-100 h-px w-full" />
-                    <Text
-                      className="leading-[180.00%] text-gray-500 text-xs tracking-[0.12px] w-full"
-                      size="txtUrbanistRegular12"
-                    >
-                      Murakami.Flowers is a work in which artist Takashi
-                      Murakami’s representative artwork.....
-                    </Text>
-                  </div>
-                </div>
-              </div> */}
-              {/* <CreateCampaign/> */}
-              {/* <div className="flex flex-col gap-5 items-center justify-start mb-[15px] pt-[3px] w-full">
-                <div className="flex flex-row items-start justify-between w-full">
-                  <Text
-                    className="text-black-900 text-lg"
-                    size="txtUrbanistSemiBold18Black900"
-                  >
-                    Recent Donation
-                  </Text>
-                  <Text
-                    className="mb-0.5 text-gray-900 text-sm tracking-[0.14px]"
-                    size="txtUrbanistMedium14Gray900"
-                  >
-                    See All
-                  </Text>
-                </div>
-                <List
-                  className="flex flex-col gap-5 items-center w-full"
-                  orientation="vertical"
-                >
-                  <div className="flex flex-1 flex-row gap-[34px] items-center justify-between w-full">
-                    <div className="flex flex-row gap-3.5 items-center justify-between w-[62%]">
-                      <Img
-                        className="h-[42px] md:h-auto rounded-[50%] w-[42px]"
-                        src="images/img_ellipse1018_1.png"
-                        alt="Ellipse1018 Two"
-                      />
-                      <div className="flex flex-col items-start justify-start">
-                        <Text
-                          className="text-base text-black-900 tracking-[0.16px]"
-                          size="txtUrbanistSemiBold16"
-                        >
-                          Uzachi #4390
-                        </Text>
-                        <Text
-                          className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
-                          size="txtUrbanistMedium12Gray500"
-                        >
-                          From Ragnarok Meta
-                        </Text>
-                      </div>
-                    </div>
-                    <div className="flex flex-row gap-1.5 items-center justify-start w-[27%]">
-                      <Img
-                        className="h-4 w-4"
-                        src="images/img_sort.svg"
-                        alt="sort Five"
-                      />
-                      <Text
-                        className="text-black-900 text-sm tracking-[0.14px]"
-                        size="txtUrbanistMedium14Black900"
-                      >
-                        2.15 ETH
-                      </Text>
-                    </div>
-                  </div>
-                  <Line className="self-center h-px bg-gray-100 w-full" />
-                  <div className="flex flex-1 flex-row gap-[34px] items-center justify-between w-full">
-                    <div className="flex flex-row gap-3.5 items-start justify-between w-3/5">
-                      <Img
-                        className="h-[42px] md:h-auto rounded-[50%] w-[42px]"
-                        src="images/img_ellipse1018_2.png"
-                        alt="Ellipse1018 Three"
-                      />
-                      <div className="flex flex-col items-start justify-start">
-                        <Text
-                          className="text-base text-black-900 tracking-[0.16px]"
-                          size="txtUrbanistSemiBold16"
-                        >
-                          Doodles #3486
-                        </Text>
-                        <Text
-                          className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
-                          size="txtUrbanistMedium12Gray500"
-                        >
-                          From Doodles
-                        </Text>
-                      </div>
-                    </div>
-                    <div className="flex flex-row gap-1.5 items-center justify-start w-[29%]">
-                      <Img
-                        className="h-4 w-4"
-                        src="images/img_sort.svg"
-                        alt="sort Six"
-                      />
-                      <Text
-                        className="text-black-900 text-sm tracking-[0.14px]"
-                        size="txtUrbanistMedium14Black900"
-                      >
-                        4.42 ETH
-                      </Text>
-                    </div>
-                  </div>
-                  <Line className="self-center h-px bg-gray-100 w-full" />
-                  <div className="flex flex-1 flex-row gap-5 items-center justify-between w-full">
-                    <div className="flex flex-row gap-3.5 items-start justify-between w-[66%]">
-                      <Img
-                        className="h-[42px] md:h-auto rounded-[50%] w-[42px]"
-                        src="images/img_ellipse1018_3.png"
-                        alt="Ellipse1018 Four"
-                      />
-                      <div className="flex flex-col items-start justify-start">
-                        <Text
-                          className="text-base text-black-900 tracking-[0.16px]"
-                          size="txtUrbanistSemiBold16"
-                        >
-                          Murakami #2766
-                        </Text>
-                        <Text
-                          className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
-                          size="txtUrbanistMedium12Gray500"
-                        >
-                          From Murakami
-                        </Text>
-                      </div>
-                    </div>
-                    <div className="flex flex-row gap-1.5 items-center justify-start w-[27%]">
-                      <Img
-                        className="h-4 w-4"
-                        src="images/img_sort.svg"
-                        alt="sort Seven"
-                      />
-                      <Text
-                        className="text-black-900 text-sm tracking-[0.14px]"
-                        size="txtUrbanistMedium14Black900"
-                      >
-                        1.08 ETH
-                      </Text>
-                    </div>
-                  </div>
-                  <Line className="self-center h-px bg-gray-100 w-full" />
-                  <div className="flex flex-1 flex-row items-center justify-between w-full">
-                    <div className="flex flex-row gap-3.5 items-start justify-between w-[59%]">
-                      <Img
-                        className="h-[42px] md:h-auto rounded-[50%] w-[42px]"
-                        src="images/img_ellipse1018_4.png"
-                        alt="Ellipse1018 Five"
-                      />
-                      <div className="flex flex-col items-start justify-start">
-                        <Text
-                          className="text-base text-black-900 tracking-[0.16px]"
-                          size="txtUrbanistSemiBold16"
-                        >
-                          Doodles #2761
-                        </Text>
-                        <Text
-                          className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
-                          size="txtUrbanistMedium12Gray500"
-                        >
-                          From Murakami
-                        </Text>
-                      </div>
-                    </div>
-                    <div className="flex flex-row gap-1.5 items-start justify-start w-[26%]">
-                      <Img
-                        className="h-4 w-4"
-                        src="images/img_sort.svg"
-                        alt="sort Eight"
-                      />
-                      <Text
-                        className="text-black-900 text-sm tracking-[0.14px]"
-                        size="txtUrbanistMedium14Black900"
-                      >
-                        4.4 ETH
-                      </Text>
-                    </div>
-                  </div>
-                  <Line className="self-center h-px bg-gray-100 w-full" />
-                  <div className="flex flex-1 flex-row gap-3.5 items-center justify-between w-full">
-                    <div className="flex flex-row gap-3.5 items-start justify-between w-[67%]">
-                      <Img
-                        className="h-[42px] md:h-auto rounded-[50%] w-[42px]"
-                        src="images/img_ellipse1018_5.png"
-                        alt="Ellipse1018 Six"
-                      />
-                      <div className="flex flex-col items-start justify-start">
-                        <Text
-                          className="text-base text-black-900 tracking-[0.16px]"
-                          size="txtUrbanistSemiBold16"
-                        >
-                          Peachy Puch#22
-                        </Text>
-                        <Text
-                          className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
-                          size="txtUrbanistMedium12Gray500"
-                        >
-                          From Mindblowonstudio
-                        </Text>
-                      </div>
-                    </div>
-                    <div className="flex flex-row gap-1.5 items-center justify-start w-[29%]">
-                      <Img
-                        className="h-4 w-4"
-                        src="images/img_sort.svg"
-                        alt="sort Nine"
-                      />
-                      <Text
-                        className="text-black-900 text-sm tracking-[0.14px]"
-                        size="txtUrbanistMedium14Black900"
-                      >
-                        5.62 ETH
-                      </Text>
-                    </div>
-                  </div>
-                  <Line className="self-center h-px bg-gray-100 w-full" />
-                  <div className="flex flex-1 flex-row gap-[33px] items-center justify-between w-full">
-                    <div className="flex flex-row gap-3.5 items-center justify-between w-[61%]">
-                      <Img
-                        className="h-[42px] md:h-auto rounded-[50%] w-[42px]"
-                        src="images/img_ellipse1018_6.png"
-                        alt="Ellipse1018 Seven"
-                      />
-                      <div className="flex flex-col items-center justify-start">
-                        <Text
-                          className="text-base text-black-900 tracking-[0.16px]"
-                          size="txtUrbanistSemiBold16"
-                        >
-                          Gemmy #3723
-                        </Text>
-                        <Text
-                          className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
-                          size="txtUrbanistMedium12Gray500"
-                        >
-                          From GemmySolana
-                        </Text>
-                      </div>
-                    </div>
-                    <div className="flex flex-row gap-1.5 items-center justify-start w-[28%]">
-                      <Img
-                        className="h-4 w-4"
-                        src="images/img_sort.svg"
-                        alt="sort Ten"
-                      />
-                      <Text
-                        className="text-black-900 text-sm tracking-[0.14px]"
-                        size="txtUrbanistMedium14Black900"
-                      >
-                        5.32 ETH
-                      </Text>
-                    </div>
-                  </div>
-                </List>
-              </div> */}
               <div className="flex flex-col gap-5 items-center justify-start mb-[15px] pt-[3px] w-full">
       {/* Header */}
       <div className="flex flex-row items-start justify-between w-full">
@@ -1103,15 +724,15 @@ console.log(">>>> getCampaign" , data)
         {dummyDonators.map((donator, index) => (
           <div key={index} className="flex flex-row items-center justify-between w-full p-3 border-b last:border-b-0 hover:bg-gray-100 transition duration-200">
             <div className="flex flex-row gap-4 items-center">
-              <Img className="h-10 w-10 rounded-full" src={donator.avatar} alt={`${donator.name} avatar`} />
+              <Img className="h-10 w-10 rounded-full" src={dummyDonators[index].avatar } alt={`${dummyDonators[index].name} avatar`} />
               <div className="flex flex-col">
-                <Text className="text-lg font-semibold text-black-900">{donator.name}</Text>
-                <Text className="text-sm text-gray-500">{donator.origin}</Text>
+                <Text className="text-lg font-semibold text-black-900">{donator.campaignName}</Text>
+                <Text className="text-sm text-gray-500">{dummyDonators[index].origin}</Text>
               </div>
             </div>
             <div className="flex flex-row items-center text-sm text-black-900 font-medium">
               <Img className="h-5 w-5 mr-2" src="images/img_sort.svg" alt="sort icon" />
-              {donator.amount}
+              {/* {donator} */}
             </div>
           </div>
         ))}
