@@ -15,48 +15,6 @@ import NFTbackground from "../../assets/images/NFTbackgrounfSocialImpact.png"
 
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-
-
-// const initialCampaignData = [
-//   {
-//     id: 1,
-//     title: "The Unfortable Facer",
-//     creator: "By Bane Riccardo",
-//     image: "images/img_group33917.png",
-//     timeLeft: 7200, // Time in seconds (e.g., 2 hours = 7200 seconds)
-//     currentBid: "18,99 ETH",
-//     donationTarget: 500,
-//     currentRaised: 150,
-//     isDonation: true,
-//     isEnded: false,
-//   },
-//   {
-//     id: 2,
-//     title: "Mad Ballot Holder",
-//     creator: "By Angelina Cruzz",
-//     image: "images/img_group33917_140X222.png",
-//     timeLeft: 0, // This campaign has ended
-//     currentBid: "4,32 ETH",
-//     donationTarget: 200,
-//     currentRaised: 75,
-//     isDonation: true,
-//     isEnded: true,
-//   },
-//   {
-//     id: 3,
-//     title: "Pile of Many Plates",
-//     creator: "By Ralphi Arness",
-//     image: "images/img_group33917_1.png",
-//     timeLeft: 5400, // Time in seconds (e.g., 1.5 hours)
-//     currentBid: "4,32 ETH",
-//     donationTarget: 300,
-//     currentRaised: 300,
-//     isDonation: true,
-//     isEnded: false,
-//   },
-//   // Add more campaigns as needed
-// ];
-
 const campaigns = [
   { id: 1, name: "Save the Oceans" },
   { id: 2, name: "Plant a Million Trees" },
@@ -106,27 +64,7 @@ console.log(">>>> getCampaign" , data)
   
     async function processCampaigns() {
       try {
-        const updatedCampaigns = await Promise.all(
-          data.map(async (campaign) => {
-            const { imageUri, tiers } = campaign;
-  
-            // Fetch additional campaign image from IPFS
-            const image = await fetchFileFromIPFS(imageUri).catch(() => null);
-  
-            // Enrich tiers dynamically
-            const enrichedTiers = await Promise.all(
-              tiers.map((tier) => fetchFileFromIPFS(tier.uri).catch(() => null))
-            );
-  
-            return {
-              ...campaign,
-              image,
-              enrichedTiers,
-            };
-          })
-        );
-  
-        setCampaignData(updatedCampaigns); // Update state
+        setCampaignData(data); // Update state
       } catch (error) {
         console.error("Error processing campaigns:", error);
       }
