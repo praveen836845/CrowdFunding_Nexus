@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Sidebar } from "react-pro-sidebar";
 import { useNavigate } from "react-router-dom";
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from "wagmi";
 import { parseEther } from "viem";
 
 import {CrowdFundingABI} from '../../abi/constants'
@@ -75,6 +75,47 @@ const ShopInfoForm = ({ onSubmit }) => {
       setTier3Image(file);
     }
   };
+
+  const donateToCampaign = async (campaignId, amount) => {
+    try {
+      const hash = await writeContractAsync({
+        address: CONTRACT_ADDRESS,
+        abi: CrowdFundingABI,
+        functionName: 'donateToCampaign',
+        args: [campaignId],
+      });
+      console.log("Donated Successfully: ", hash);
+      
+    } catch (error) {
+      console.error("Error donating to campaign: ", error);
+    }
+  }
+
+  const getCampaigns = async () => {
+    try {
+      const campaigns = await useReadContract({
+        address: CONTRACT_ADDRESS,
+        abi: CrowdFundingABI,
+        functionName: 'getCampaigns'
+      });
+      console.log("Campaigns: ", campaigns);
+    } catch (error) {
+      console.error("Error getting campaigns: ", error);
+    }
+  }
+
+  const getDonations = async () => {
+    try {
+      const donations = await useReadContract({
+        address: CONTRACT_ADDRESS,
+        abi: CrowdFundingABI,
+        functionName: 'getDonations',
+        args: [address]
+      })
+    } catch (error) {
+      
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
