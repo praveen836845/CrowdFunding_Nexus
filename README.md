@@ -1,108 +1,78 @@
-# CherrySwap
 
-## Description
+# Crowdfunding DApp for Environmental Impact
 
-- CherrySwap is a new NFT Marketplace in the town build for buying , selling and swapping of NFTS OR any Token.
-- This React application is built using [create-react-app](https://create-react-app.dev/).
-- It uses [Tailwind CSS](https://tailwindcss.com/)
-- The application is build in JavaScript .
+## Overview
 
-## Pre-requisites
+This decentralized application (DApp) is a blockchain-based crowdfunding platform designed to support environmental impact initiatives. Users can create campaigns to raise funds, and donors are rewarded with NFTs based on their donation amount. The platform also includes an NFT marketplace where users can buy and sell their reward NFTs.
 
-- [git](https://git-scm.com/) - v2.13 or greater
-- [NodeJS](https://nodejs.org/en/) - v16 or greater
-- [npm](https://www.npmjs.com/) - v6 or greater
+---
 
-## Running in dev environment
+## Features
 
-1.  `cd YOUR_APPLICATION`
-2.  `npm install`
-3.  `npm start`
+### 1. **Create Crowdfunding Campaigns**
 
-## .env file
+- Users can start campaigns to raise funds for environmental causes.
+- Campaign creators can set a funding goal, deadline, and description.
 
-This file contains various environment variables that you can configure.
+### 2. **Donate and Earn NFTs**
 
-## Folder Structure
+- Donors receive unique NFTs as rewards for their contributions.
+- Three tiers of NFTs are available, based on the donation amount:
+  - **Bronze Tier**: Small contributions.
+  - **Silver Tier**: Medium contributions.
+  - **Gold Tier**: Large contributions.
 
-```
- .
- ├── package.json
- ├── postcss.config.js
- ├── public
- │   ├── assets
- │   │   └── images --------- All Project Images
- │   ├── favicon.ico
- │   ├── index.html
- │   ├── manifest.json
- │   └── robots.txt
- ├── README.md
- ├── src
- │   ├── App.jsx
- │   ├── assets
- │   │   └── fonts ---------- Project fonts
- │   ├── components --------- UI and Detected Common Components
- │   ├── constants ---------- Project constants, eg: string consts
- │   ├── hooks -------------- Helpful Hooks
- │   ├── index.jsx
- │   ├── pages -------------- All route pages
- │   ├── Routes.jsx ---------- Routing
- │   ├── styles
- │   │   ├── index.css ------ Other Global Styles
- │   │   └── tailwind.css --- Default Tailwind modules
- │   └── util
- │       └── index.jsx ------- Helpful utils
- └── tailwind.config.js ----- Entire theme config, colors, fonts etc.
-```
+### 3. **NFT Marketplace**
 
-For the project to build, **these files must exist with exact filenames**:
+- A built-in marketplace allows users to:
+  - **Sell** their NFTs to other users.
+  - **Buy** NFTs from the marketplace.
 
-- `public/index.html` is the page template;
-- `src/index.jsx` is the JavaScript entry point.
+### 4. **Blockchain-Powered Transparency**
 
-You may create subdirectories inside src.
+- All transactions are securely recorded on the blockchain.
+- Campaign progress, donations, and NFT ownership are transparent and tamper-proof.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Technology Stack
 
-### `npm start`
+- **Frontend**: React.js with Wagmi for interacting with smart contracts.
+- **Backend**: Solidity smart contracts for handling campaigns, donations, and NFT minting.
+- **Blockchain**: Ethereum (or compatible networks).
+- **Storage**: IPFS for storing NFT metadata.
+- **Marketplace**: Smart contracts to handle NFT trading.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-### `npm test`
+## Usage
 
-Launches the test runner in the interactive watch mode.<br>
+1. **Create a Campaign**:
 
-### `npm run build`
+   - Navigate to the "Create Campaign" section.
+   - Fill in the required details and submit the campaign.
+2. **Donate**:
 
-Builds the app for production to the `build` folder.<br>
+   - Select a campaign and click on the "Donate Now" button.
+   - Choose the donation amount and confirm the transaction through your wallet.
+   - Receive an NFT as a reward based on the donation amount.
+3. **View Your NFTs**:
 
-### `npm run eject`
+   - Go to the "My NFTs" section to see the NFTs you have earned.
+   - NFTs will display details such as the tier and campaign associated with your donation.
+4. **Marketplace**:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+   - Use the "Marketplace" section to:
+     - **Buy NFTs**: Browse available NFTs, select one, and confirm the purchase through your wallet.
+     - **Sell NFTs**: List your NFTs for sale by setting a price and confirming the transaction.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time.
-
-## Installing a Dependency
-
-You can install any dependencies (for example, React Router) with `npm`:
-
-```sh
-npm install --save react-router
-```
-
-Alternatively you may use `yarn`:
-
-```sh
-yarn add react-router
-```
+---
 
 ## License
 
-MIT License
+This project is licensed under the MIT License.
 
-# Author
+---
 
-Made with ❤️ from [GolaK](https://github.com/CherrySwapNftMarketplace)
+**Start making an impact today!**
+Let’s build a better future, one campaign at a time.
