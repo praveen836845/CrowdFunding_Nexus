@@ -377,6 +377,37 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "donor",
+				"type": "address"
+			}
+		],
+		"name": "getDonations",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "campaignName",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "donation",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct CrowdFunding.DonationInfo[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "_id",
 				"type": "uint256"

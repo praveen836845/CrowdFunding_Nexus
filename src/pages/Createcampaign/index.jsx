@@ -44,10 +44,18 @@ const ShopInfoForm = ({ onSubmit }) => {
     hash: transactionHash,
     onSuccess: () => {
       console.log("successfully Happen the transactions")
-      // navigate("/");
+      navigate("/");
     },
   });
 
+  // const donations =  useReadContract({
+  //         address: CONTRACT_ADDRESS,
+  //         abi: CrowdFundingABI,
+  //         functionName: 'getDonations',
+  //         args: [address]
+  //       })
+      
+  //     console.log("donations>>>> " , donations)
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -91,31 +99,31 @@ const ShopInfoForm = ({ onSubmit }) => {
     }
   }
 
-  const getCampaigns = async () => {
-    try {
-      const campaigns = await useReadContract({
-        address: CONTRACT_ADDRESS,
-        abi: CrowdFundingABI,
-        functionName: 'getCampaigns'
-      });
-      console.log("Campaigns: ", campaigns);
-    } catch (error) {
-      console.error("Error getting campaigns: ", error);
-    }
-  }
+  // const getCampaigns = async () => {
+  //   try {
+  //     const campaigns = await useReadContract({
+  //       address: CONTRACT_ADDRESS,
+  //       abi: CrowdFundingABI,
+  //       functionName: 'getCampaigns'
+  //     });
+  //     console.log("Campaigns: ", campaigns);
+  //   } catch (error) {
+  //     console.error("Error getting campaigns: ", error);
+  //   }
+  // }
 
-  const getDonations = async () => {
-    try {
-      const donations = await useReadContract({
-        address: CONTRACT_ADDRESS,
-        abi: CrowdFundingABI,
-        functionName: 'getDonations',
-        args: [address]
-      })
-    } catch (error) {
+  // const getDonations = async () => {
+  //   try {
+  //     const donations = await useReadContract({
+  //       address: CONTRACT_ADDRESS,
+  //       abi: CrowdFundingABI,
+  //       functionName: 'getDonations',
+  //       args: [address]
+  //     })
+  //   } catch (error) {
       
-    }
-  }
+  //   }
+  // }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -126,64 +134,57 @@ const ShopInfoForm = ({ onSubmit }) => {
     }
 
     console.log("Upload file to ipfs");
-    const imageIPFS = await uploadFile(image);
-    setImageURI(`https://${GATEWAY}/ipfs/${imageIPFS}`);
-    const tier1IPFS = await uploadFile(tier1Image);
-    setTier1URI(`https://${GATEWAY}/ipfs/${tier1IPFS}`);
-    const tier2IPFS = await uploadFile(tier2Image);
-    setTier2URI(`https://${GATEWAY}/ipfs/${tier2IPFS}`);
-    const tier3IPFS = await uploadFile(tier3Image);
-    setTier3URI(`https://${GATEWAY}/ipfs/${tier3IPFS}`);
+    // const imageIPFS = await uploadFile(image);
+    // setImageURI(`https://${GATEWAY}/ipfs/${imageIPFS}`);
+    // const tier1IPFS = await uploadFile(tier1Image);
+    // setTier1URI(`https://${GATEWAY}/ipfs/${tier1IPFS}`);
+    // const tier2IPFS = await uploadFile(tier2Image);
+    // setTier2URI(`https://${GATEWAY}/ipfs/${tier2IPFS}`);
+    // const tier3IPFS = await uploadFile(tier3Image);
+    // setTier3URI(`https://${GATEWAY}/ipfs/${tier3IPFS}`);
+    const [imageIPFS, tier1IPFS, tier2IPFS, tier3IPFS] = await Promise.all([
+      uploadFile(image),
+      uploadFile(tier1Image),
+      uploadFile(tier2Image),
+      uploadFile(tier3Image)
+    ]);
+
+    // Create the URIs
+    const finalImageURI = `https://${GATEWAY}/ipfs/${imageIPFS}`;
+    const finalTier1URI = `https://${GATEWAY}/ipfs/${tier1IPFS}`;
+    const finalTier2URI = `https://${GATEWAY}/ipfs/${tier2IPFS}`;
+    const finalTier3URI = `https://${GATEWAY}/ipfs/${tier3IPFS}`;
     console.log("Upload file to ipfs");
     
+    console.log("check that this image is uploaded or not " , tier1IPFS)
     const deadlineTimestamp = Math.floor(new Date(deadline).getTime() / 1000);
 
     // Prepare contract call
-    console.log(">>>" , target )
-    // const amt1  = parseEther(target.toString())
-    // const amt2  = parseEther(minAmount.toString())
+    console.log(">>>checking the URI and Images" ) ;
     const  hash  =   await writeContractAsync({
-    
         address: CONTRACT_ADDRESS,
         abi: CrowdFundingABI,
         functionName: 'createCampaign',
         args: [
-          address,                              // address _owner
-          title,                              // string memory _title
-          description,                        // string memory _description
+          address,                            
+          title,                            
+          description,                       
           // parseEther(target.toString()),  
-          10000000,    // uint256 _target
-           deadlineTimestamp,          // uint256 _deadline
+          10000000,    
+           deadlineTimestamp,          
           // parseEther(minAmount.toString()),
-            10000000,   // uint256 _minAmount
-          imageURI,                           // string memory _image
-          tier1URI,                           // string memory _tier1URI
-          tier2URI,                          // string memory _tier2URI
-          tier3URI                           // string memory _tier3URI
+            10000000,   
+            finalImageURI,                           // string memory _image
+            finalTier1URI,                           // string memory _tier1URI
+            finalTier2URI,                          // string memory _tier2URI
+            finalTier3URI                           // string memory _tier3URI
         ],
     });
     console.log("transaction Hash is there" , hash);
     setTransactionHash(hash);
  console.log("tranasaction has been called");
-    // const waitForTransaction = async () => {
-    //   try {
-    //     const receipt = await useWaitForTransactionReceipt({ hash });
-        
-    //     if (receipt.status === 'success') {
-    //     console.log("Successfully getting the added the transactions")
-        
-    //     } else {
-    //       console.log("Transaction failed. Please try again.");
-    //     }
-    //   } catch (error) {
-    //     console.log("Error confirming transaction: " + error.message);
-    //   }
-    // };
-
-    // await waitForTransaction();
-
-
   };
+
 
   const navigate = useNavigate();
 
@@ -404,7 +405,7 @@ const ShopInfoForm = ({ onSubmit }) => {
             <input type="file" className="input" onChange={(e) => handletier3URI(e)} />
           </div>
           <div className="form-actions">
-            <button type="button" className="btn-cancel">Cancel</button>
+            <button type="button" className="btn-cancel" >Cancel</button>
             <button type="submit" className="btn-submit">Save</button>
           </div>
         </form>

@@ -7,7 +7,9 @@ import { Sidebar } from "react-pro-sidebar";
 import { useNavigate } from "react-router-dom";
 
 import { Button, Img, Input, Line, List, Text } from "components";
-
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from "wagmi";
+import {CrowdFundingABI} from '../../abi/constants'
+import {CrowdFundingAddress} from '../../abi/constants'
 import { CloseSVG } from "../../assets/images";
 import NFTbackground from "../../assets/images/NFTbackgrounfSocialImpact.png"
 
@@ -15,45 +17,45 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 
 
-const initialCampaignData = [
-  {
-    id: 1,
-    title: "The Unfortable Facer",
-    creator: "By Bane Riccardo",
-    image: "images/img_group33917.png",
-    timeLeft: 7200, // Time in seconds (e.g., 2 hours = 7200 seconds)
-    currentBid: "18,99 ETH",
-    donationTarget: 500,
-    currentRaised: 150,
-    isDonation: true,
-    isEnded: false,
-  },
-  {
-    id: 2,
-    title: "Mad Ballot Holder",
-    creator: "By Angelina Cruzz",
-    image: "images/img_group33917_140X222.png",
-    timeLeft: 0, // This campaign has ended
-    currentBid: "4,32 ETH",
-    donationTarget: 200,
-    currentRaised: 75,
-    isDonation: true,
-    isEnded: true,
-  },
-  {
-    id: 3,
-    title: "Pile of Many Plates",
-    creator: "By Ralphi Arness",
-    image: "images/img_group33917_1.png",
-    timeLeft: 5400, // Time in seconds (e.g., 1.5 hours)
-    currentBid: "4,32 ETH",
-    donationTarget: 300,
-    currentRaised: 300,
-    isDonation: true,
-    isEnded: false,
-  },
-  // Add more campaigns as needed
-];
+// const initialCampaignData = [
+//   {
+//     id: 1,
+//     title: "The Unfortable Facer",
+//     creator: "By Bane Riccardo",
+//     image: "images/img_group33917.png",
+//     timeLeft: 7200, // Time in seconds (e.g., 2 hours = 7200 seconds)
+//     currentBid: "18,99 ETH",
+//     donationTarget: 500,
+//     currentRaised: 150,
+//     isDonation: true,
+//     isEnded: false,
+//   },
+//   {
+//     id: 2,
+//     title: "Mad Ballot Holder",
+//     creator: "By Angelina Cruzz",
+//     image: "images/img_group33917_140X222.png",
+//     timeLeft: 0, // This campaign has ended
+//     currentBid: "4,32 ETH",
+//     donationTarget: 200,
+//     currentRaised: 75,
+//     isDonation: true,
+//     isEnded: true,
+//   },
+//   {
+//     id: 3,
+//     title: "Pile of Many Plates",
+//     creator: "By Ralphi Arness",
+//     image: "images/img_group33917_1.png",
+//     timeLeft: 5400, // Time in seconds (e.g., 1.5 hours)
+//     currentBid: "4,32 ETH",
+//     donationTarget: 300,
+//     currentRaised: 300,
+//     isDonation: true,
+//     isEnded: false,
+//   },
+//   // Add more campaigns as needed
+// ];
 
 const campaigns = [
   { id: 1, name: "Save the Oceans" },
@@ -70,7 +72,70 @@ const DashboardPage = ({ onSubmit }) => {
 
   const [searchinputvalue, setSearchinputvalue] = React.useState("");
 
-  const [campaignData, setCampaignData] = useState(initialCampaignData);
+  const [campaignData, setCampaignData] = useState([]);
+  const CONTRACT_ADDRESS = CrowdFundingAddress
+
+  // Adding this data to the
+  const { data, isError, isLoading: contractLoading } = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: CrowdFundingABI,
+    functionName: 'getCampaigns'
+  });
+console.log(">>>> getCampaign" , data)
+  async function fetchFileFromIPFS(url) {
+    // const url = `https://${GATEWAY}/ipfs/${cid}`;
+    try {
+      const request = await fetch(url);
+      const contentType = request.headers.get("content-type");
+  
+      if (contentType.includes("application/json")) {
+        return await request.json();
+      } else if (contentType.includes("image")) {
+        return url; 
+      } else {
+        return await request.text();
+      }
+    } catch (error) {
+      console.error("Error fetching from IPFS:", error);
+      return null;
+    }
+  }
+
+  useEffect(() => {
+    if (!data) return; // Avoid redundant fetches.
+  
+    async function processCampaigns() {
+      try {
+        const updatedCampaigns = await Promise.all(
+          data.map(async (campaign) => {
+            const { imageUri, tiers } = campaign;
+  
+            // Fetch additional campaign image from IPFS
+            const image = await fetchFileFromIPFS(imageUri).catch(() => null);
+  
+            // Enrich tiers dynamically
+            const enrichedTiers = await Promise.all(
+              tiers.map((tier) => fetchFileFromIPFS(tier.uri).catch(() => null))
+            );
+  
+            return {
+              ...campaign,
+              image,
+              enrichedTiers,
+            };
+          })
+        );
+  
+        setCampaignData(updatedCampaigns); // Update state
+      } catch (error) {
+        console.error("Error processing campaigns:", error);
+      }
+    }
+  
+    processCampaigns();
+  }, [data]);
+  
+  
 
   // Function to convert seconds to "h m s" format
   const formatTime = (seconds) => {
@@ -80,26 +145,27 @@ const DashboardPage = ({ onSubmit }) => {
     return `${h}h ${m}m ${s}s`;
   };
 
-  useEffect(() => {
-    // Timer to update timeLeft every second
-    const timer = setInterval(() => {
-      setCampaignData((prevCampaigns) =>
-        prevCampaigns
-          .map((campaign) => {
-            if (campaign.timeLeft > 0) {
-              return { ...campaign, timeLeft: campaign.timeLeft - 1 };
-            } else {
-              return { ...campaign, isEnded: true };
-            }
-          })
-          .filter((campaign) => campaign.timeLeft > 0) // Remove campaigns with 0 time left
-      );
-    }, 1000);
+  // useEffect(() => {
+  //   // Timer to update timeLeft every second
+  //   const timer = setInterval(() => {
+  //     setCampaignData((prevCampaigns) =>
+  //       prevCampaigns
+  //         .map((campaign) => {
+  //           if (campaign.timeLeft > 0) {
+  //             return { ...campaign, timeLeft: campaign.timeLeft - 1 };
+  //           } else {
+  //             return { ...campaign, isEnded: true };
+  //           }
+  //         })
+  //         .filter((campaign) => campaign.timeLeft > 0) // Remove campaigns with 0 time left
+  //     );
+  //   }, 1000);
 
-    // Cleanup the interval when the component is unmounted
-    return () => clearInterval(timer);
-  }, []);
+  //   // Cleanup the interval when the component is unmounted
+  //   return () => clearInterval(timer);
+  // }, []);
 
+  console.log(">>>campigndata" , campaignData)
   //NFts Ranking
   const users = [
     { id: 1, name: 'Doodle Lucu', avatar: 'images/img_ellipse1018.png', donation: 14.32, nfts: 10, campaigns: 18 },
@@ -215,26 +281,7 @@ const DashboardPage = ({ onSubmit }) => {
   const handleNavigate = () => {
     navigate("/create-campaign");
   }
-
-  //from Model
-
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // const handleOpenModal = () => {
-  //   setIsModalOpen(true);
-  // };
-
-  // const handleCloseModal = () => {
-  //   setIsModalOpen(false);
-  // };
-
-  // const handleFormSubmit = (formData) => {
-  //   console.log("Campaign Created:", formData);
-  //   setIsModalOpen(false); // Close the modal after submission
-  // };
-
-  //wallet connection
-
+  
 
   return (
     <>
@@ -285,44 +332,6 @@ const DashboardPage = ({ onSubmit }) => {
                       </Text>
                     </div>
                   </div>
-                  {/* <div
-                    className="common-pointer flex flex-col font-urbanist items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/message")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[47%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_car.svg"
-                        alt="car"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/message")}
-                      >
-                        Message
-                      </Text>
-                    </div>
-                  </div> */}
-                  {/* <div
-                    className="common-pointer flex flex-col font-urbanist items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/settings")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[45%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_settings.svg"
-                        alt="settings"
-                      />
-                      <Text
-                        className="common-pointer text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                        onClick={() => navigate("/settings")}
-                      >
-                        Settings
-                      </Text>
-                    </div>
-                  </div> */}
                 </div>
               </div>
               <div className="flex flex-col gap-4 justify-start w-full">
