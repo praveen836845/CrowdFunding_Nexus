@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { Sidebar } from "react-pro-sidebar";
 import { useNavigate } from "react-router-dom";
-import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { parseEther } from "viem";
 
 import {CrowdFundingABI} from '../../abi/constants'
+import {CrowdFundingAddress} from '../../abi/constants'
 
 import './index.css';
 
 import { Button, Img, Text } from "components";
 import { uploadFile } from "utils/upload";
+
 
 const ShopInfoForm = ({ onSubmit }) => {
   const [owner, setOwner] = useState("");
@@ -22,14 +24,29 @@ const ShopInfoForm = ({ onSubmit }) => {
   const [tier1Image, setTier1Image] = useState("");
   const [tier2Image, setTier2Image] = useState("");
   const [tier3Image, setTier3Image] = useState("");
+  const [transactionHash, setTransactionHash] = useState(""); // New state for tracking transaction hash
+
 
   const [imageURI, setImageURI] = useState("");
   const [tier1URI, setTier1URI] = useState("");
   const [tier2URI, setTier2URI] = useState("");
   const [tier3URI, setTier3URI] = useState("");
+  
+  const CONTRACT_ADDRESS = CrowdFundingAddress
 
 
   const GATEWAY = "gateway.pinata.cloud";
+  
+  const { address, isConnected } = useAccount(); // This is the client address
+
+  const {writeContractAsync , isPending} = useWriteContract();
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash: transactionHash,
+    onSuccess: () => {
+      console.log("successfully Happen the transactions")
+      // navigate("/");
+    },
+  });
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -61,7 +78,7 @@ const ShopInfoForm = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("checking that address" , address);
     if (!owner || !title || !description || !target || !deadline || !minAmount || !image || !tier1Image || !tier2Image || !tier3Image) {
       alert("Please fill all the fields");
       return;
@@ -77,6 +94,54 @@ const ShopInfoForm = ({ onSubmit }) => {
     const tier3IPFS = await uploadFile(tier3Image);
     setTier3URI(`https://${GATEWAY}/ipfs/${tier3IPFS}`);
     console.log("Upload file to ipfs");
+    
+    const deadlineTimestamp = Math.floor(new Date(deadline).getTime() / 1000);
+
+    // Prepare contract call
+    console.log(">>>" , target )
+    // const amt1  = parseEther(target.toString())
+    // const amt2  = parseEther(minAmount.toString())
+    const  hash  =   await writeContractAsync({
+    
+        address: CONTRACT_ADDRESS,
+        abi: CrowdFundingABI,
+        functionName: 'createCampaign',
+        args: [
+          address,                              // address _owner
+          title,                              // string memory _title
+          description,                        // string memory _description
+          // parseEther(target.toString()),  
+          10000000,    // uint256 _target
+           deadlineTimestamp,          // uint256 _deadline
+          // parseEther(minAmount.toString()),
+            10000000,   // uint256 _minAmount
+          imageURI,                           // string memory _image
+          tier1URI,                           // string memory _tier1URI
+          tier2URI,                          // string memory _tier2URI
+          tier3URI                           // string memory _tier3URI
+        ],
+    });
+    console.log("transaction Hash is there" , hash);
+    setTransactionHash(hash);
+ console.log("tranasaction has been called");
+    // const waitForTransaction = async () => {
+    //   try {
+    //     const receipt = await useWaitForTransactionReceipt({ hash });
+        
+    //     if (receipt.status === 'success') {
+    //     console.log("Successfully getting the added the transactions")
+        
+    //     } else {
+    //       console.log("Transaction failed. Please try again.");
+    //     }
+    //   } catch (error) {
+    //     console.log("Error confirming transaction: " + error.message);
+    //   }
+    // };
+
+    // await waitForTransaction();
+
+
   };
 
   const navigate = useNavigate();
