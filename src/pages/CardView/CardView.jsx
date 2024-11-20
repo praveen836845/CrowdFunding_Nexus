@@ -10,7 +10,6 @@ import {
 } from "wagmi";
 import { CrowdFundingABI } from "../../abi/constants";
 import { CrowdFundingAddress } from "../../abi/constants";
-
 import { Button, Img, Input, Line, List, SelectBox, Text } from "components";
 
 import { CloseSVG } from "../../assets/images";
@@ -34,9 +33,10 @@ const CardView = () => {
   const navigate = useNavigate();
 
   const [searchinputvalue, setSearchinputvalue] = React.useState("");
+  const CONTRACT_ADDRESS = CrowdFundingAddress;
 
   const location = useLocation();
-
+  const { writeContractAsync, isPending } = useWriteContract();
   // Check if the current route contains 'card-view'
   const isActive = location.pathname.includes("card-view");
 
