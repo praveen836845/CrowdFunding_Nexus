@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NotFound from "pages/NotFound";
 import { CampaignProvider } from "pages/CampaignProvider";
 import CardView from "pages/CardView/CardView";
+import MyNft from "pages/MyNft/MyNft";
 const MyProfileHistory = React.lazy(() => import("pages/MyProfileHistory"));
 const MyProfileWallet = React.lazy(() => import("pages/MyProfileWallet"));
 const MyProfileCollection = React.lazy(() =>
@@ -28,6 +29,7 @@ const ProjectRoutes = () => {
           <Route path="/" element={<Dashboard />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/message" element={<Message />} />
+          <Route path="/mynft" element={<MyNft/>} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/market" element={<Market />} />
           <Route path="/marketdetail" element={<MarketDetail />} />

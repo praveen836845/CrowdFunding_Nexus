@@ -78,17 +78,16 @@ const DashboardPage = ({ onSubmit }) => {
     }
   }
 
-  const handalerCardView = ()=>{
-      setCard(true);
-  }
-
+  const handalerCardView = () => {
+    setCard(true);
+  };
 
   useEffect(() => {
-    if (!data) return; 
+    if (!data) return;
 
     async function processCampaigns() {
       try {
-        setCampaignData(data); 
+        setCampaignData(data);
         setdonation(donationsData.data);
       } catch (error) {
         console.error("Error processing campaigns:", error);
@@ -320,7 +319,6 @@ const DashboardPage = ({ onSubmit }) => {
 
   const { setCampaign } = useCampaignContext();
 
-
   return (
     <>
       <div className="bg-white-A700 flex sm:flex-col md:flex-col flex-row font-outfit sm:gap-5 md:gap-5 items-start mx-auto w-full">
@@ -382,7 +380,7 @@ const DashboardPage = ({ onSubmit }) => {
                 <div className="flex flex-col gap-2 items-center justify-start w-full">
                   <div
                     className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/market")}
+                    // onClick={() => navigate("/market")}
                   >
                     <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[41%] md:w-full">
                       <Img
@@ -396,6 +394,20 @@ const DashboardPage = ({ onSubmit }) => {
                         onClick={() => navigate("/market")}
                       >
                         Market
+                      </Text>
+                    </div>
+                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[41%] md:w-full mt-3">
+                      <Img
+                        className="h-6 w-6"
+                        src="images/image-nft.svg"
+                        alt="user"
+                      />
+                      <Text
+                        className="common-pointer text-gray-500 text-lg tracking-[0.18px] whitespace-nowrap"
+                        size="txtUrbanistMedium18"
+                        onClick={() => navigate("/mynft")}
+                      >
+                        MY NFT
                       </Text>
                     </div>
                   </div>
@@ -451,7 +463,8 @@ const DashboardPage = ({ onSubmit }) => {
         </Sidebar>
         <div className="flex flex-1 flex-col items-center justify-start md:px-5 w-full">
           <div className="bg-white-A700 flex md:flex-col flex-row md:gap-10 items-center justify-between outline outline-gray-100 p-[34px] sm:px-5 w-full">
-            <Input
+            {/* button and search bar removed */}
+            {/* <Input
               name="SearchInput"
               placeholder="Search items, collections, and users"
               value={searchinputvalue}
@@ -481,7 +494,7 @@ const DashboardPage = ({ onSubmit }) => {
               }
               shape="round"
               size="md"
-            ></Input>
+            ></Input> */}
             <div className="flex flex-row font-urbanist gap-[30px] items-center justify-center md:mt-0 my-0.5">
               {/* <Button
                 className="cursor-pointer flex items-center justify-center min-w-[137px]"
@@ -502,7 +515,7 @@ const DashboardPage = ({ onSubmit }) => {
                 </div>
               </Button> */}
 
-              <Button
+              {/* <Button
                 className="flex h-[52px] items-center justify-center rounded-[50%] w-[52px]"
                 shape="circle"
                 color="gray_100"
@@ -510,8 +523,8 @@ const DashboardPage = ({ onSubmit }) => {
                 variant="outline"
               >
                 <Img className="h-6" src="images/img_lock.svg" alt="lock" />
-              </Button>
-              <div className="flex flex-row gap-3 items-center justify-between w-[27%]">
+              </Button> */}
+              {/* <div className="flex flex-row gap-3 items-center justify-between w-[27%]">
                 <Img
                   className="h-[52px] md:h-auto rounded-[50%] w-[52px]"
                   src="images/avatar-1.png"
@@ -521,7 +534,7 @@ const DashboardPage = ({ onSubmit }) => {
                   src="images/img_arrowdown.svg"
                   alt="arrowdown"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="flex md:flex-col flex-row font-urbanist gap-[34px] items-top justify-between w-[98%] md:w-full">
@@ -601,9 +614,9 @@ const DashboardPage = ({ onSubmit }) => {
                       campaign.isEnded ||
                       campaign.currentRaised >= campaign.donationTarget;
 
-                      const handleCardClick = () => {
-                        setCampaign(campaign); // Store the selected campaign in Context
-                      };
+                    const handleCardClick = () => {
+                      setCampaign(campaign); // Store the selected campaign in Context
+                    };
 
                     return (
                       <div className="bg-white-A700 flex flex-1 flex-col gap-5 items-center justify-start p-1.5 rounded-[15px] shadow-bs1 w-full">
@@ -712,7 +725,7 @@ const DashboardPage = ({ onSubmit }) => {
                                 disabled={isButtonDisabled}
                                 // onClick={handleShowClick}
                                 onClick={handleCardClick}
-                                
+
                                 // onClick={() => HandleDonateClick(index)}
                               >
                                 {/* {campaign.isDonation ? "Donate" : "Donate"} */}
