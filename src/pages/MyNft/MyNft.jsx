@@ -340,7 +340,11 @@ const MyNft = ({ onSubmit }) => {
                     </div>
                   </div>
                   <div>
-     
+                  {/* {
+  campaignData[3].tiers.map((tier, index) => { return(
+    <div>{tier.uri}</div>
+  )})
+} */}
                   </div>
                 </div>
               );

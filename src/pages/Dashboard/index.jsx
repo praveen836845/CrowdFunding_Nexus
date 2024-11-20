@@ -614,12 +614,15 @@ const DashboardPage = ({ onSubmit }) => {
                       campaign.isEnded ||
                       campaign.currentRaised >= campaign.donationTarget;
 
-                    const handleCardClick = () => {
+                    const handleCardClick = (index) => {
                       setCampaign(campaign); // Store the selected campaign in Context
                     };
 
                     return (
-                      <div className="bg-white-A700 flex flex-1 flex-col gap-5 items-center justify-start p-1.5 rounded-[15px] shadow-bs1 w-full">
+                      <div
+                        key={index}
+                        className="bg-white-A700 flex flex-1 flex-col gap-5 items-center justify-start p-1.5 rounded-[15px] shadow-bs1 w-full"
+                      >
                         <div
                           className="bg-cover bg-no-repeat flex flex-col h-[140px] items-end justify-start p-2 rounded-[12px] w-full"
                           style={{
@@ -724,7 +727,7 @@ const DashboardPage = ({ onSubmit }) => {
                                 variant="fill"
                                 disabled={isButtonDisabled}
                                 // onClick={handleShowClick}
-                                onClick={handleCardClick}
+                                onClick={() => handleCardClick()}
 
                                 // onClick={() => HandleDonateClick(index)}
                               >
