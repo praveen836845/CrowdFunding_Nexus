@@ -22,90 +22,51 @@ const MarketPage = () => {
     <>
       <div className="bg-white-A700 flex sm:flex-col md:flex-col flex-row font-outfit sm:gap-5 md:gap-5 items-start mx-auto pb-[50px] w-full">
         <Sidebar className="!sticky !w-[302px] flex h-screen md:hidden justify-start overflow-auto md:px-5 top-[0]">
-          <div className="flex flex-col gap-[50px] items-start justify-start mx-auto my-[34px] w-[89%]">
-            <div className="flex flex-row gap-3.5 items-start justify-start ml-4 md:ml-[0] w-[67%] md:w-full">
+          <div className="bg-gray-50 border-gray-100 border-r-[1.5px] border-solid flex flex-col gap-[50px] items-start justify-start p-[18px] w-full">
+            <div className="flex flex-row gap-3.5 items-start justify-start ml-4 md:ml-[0] mt-4 w-[67%] md:w-full">
               <Img
                 className="h-14 md:h-auto rounded-[50%] w-14"
                 src="images/avatar-1.png"
-                alt="Ellipse1015"
               />
               <div className="flex flex-col gap-1.5 items-start justify-start mt-1">
                 <Text
                   className="text-black-900 text-lg tracking-[0.18px]"
                   size="txtOutfitSemiBold18"
                 >
-                  GolaK
+                  CrowdFund
                 </Text>
                 <Text
                   className="text-gray-500 text-sm tracking-[0.14px]"
                   size="txtOutfitRegular14"
                 >
-                  @GolaK
+                  @CrowdFund
                 </Text>
               </div>
             </div>
             <div className="flex flex-col font-urbanist gap-[30px] items-center justify-start w-full">
               <div className="flex flex-col gap-4 justify-start w-full">
                 <Text
-                  className="ml-4 md:ml-[0] text-gray-901 text-xs tracking-[0.12px]"
-                  size="txtUrbanistMedium12Gray901"
+                  className="ml-4 md:ml-[0] text-black-900 text-xs tracking-[0.12px]"
+                  size="txtUrbanistMedium12"
                 >
                   GENERAL
                 </Text>
-                <div className="flex flex-col gap-2 items-center justify-start w-full">
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[54%] md:w-full">
+                <div className="flex flex-col font-outfit gap-2 items-center justify-start w-full">
+                  <div className=" flex flex-col items-start justify-start p-2 rounded-[5px] w-full">
+                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[55%] md:w-full">
                       <Img
                         className="h-6 w-6"
-                        src="images/img_clock_1.svg"
-                        alt="clock"
+                        src="images/img_eye.svg"
+                        alt="eye"
                       />
                       <Text
                         className="text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
+                        size="txtOutfitMedium18"
+                        onClick={() => navigate("/")}
                       >
                         Dashboard
                       </Text>
                     </div>
-                  </div>
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/message")}
-                  >
-                    {/* <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[47%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_car.svg"
-                        alt="car"
-                      />
-                      <Text
-                        className="text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                      >
-                        Message
-                      </Text>
-                    </div> */}
-                  </div>
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/settings")}
-                  >
-                    {/* <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[45%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_settings.svg"
-                        alt="settings"
-                      />
-                      <Text
-                        className="text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                      >
-                        Settingsx
-                      </Text>
-                    </div> */}
                   </div>
                 </div>
               </div>
@@ -116,126 +77,44 @@ const MarketPage = () => {
                 >
                   MARKETPLACE
                 </Text>
-                <div className="flex flex-col font-outfit gap-2 items-center justify-start w-full">
-                  <div className="bg-gray-900_5f flex flex-col items-start justify-start p-2.5 rounded-[10px] w-full">
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[42%] md:w-full">
+                <div className="flex flex-col gap-2 items-center justify-start w-full">
+                  <div className="bg-gray-900_5f flex flex-col items-start justify-start p-2 rounded-[10px] w-full mt-3"  >
+                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[41%] md:w-full " 
+                    >
                       <Img
                         className="h-6 w-6"
-                        src="images/img_user_3.svg"
+                        src="images/img_user.svg"
                         alt="user"
                       />
                       <Text
-                        className="text-gray-900 text-lg tracking-[0.18px]"
-                        size="txtOutfitMedium18"
+                        className="common-pointer text-lg tracking-[0.18px] whitespace-nowrap"
+                        size="txtUrbanistMedium18"
+                        onClick={() => navigate("/market")}
                       >
                         Market
                       </Text>
                     </div>
                   </div>
-                  <div
-                    className="common-pointer flex flex-col font-urbanist items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/activebid")}
-                  >
-                    {/* <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-1/2 md:w-full">
+                  <div className="common-pointer flex flex-col items-start justify-start p-2.5 w-full">
+                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[41%] md:w-full">
                       <Img
                         className="h-6 w-6"
-                        src="images/img_judge.svg"
-                        alt="judge"
+                        src="images/image-nft.svg"
+                        alt="user"
                       />
                       <Text
-                        className="text-gray-500 text-lg tracking-[0.18px]"
+                        className="common-pointer text-gray-500 text-lg tracking-[0.18px] whitespace-nowrap"
                         size="txtUrbanistMedium18"
+                        onClick={() => navigate("/mynft")}
                       >
-                        Active Bid
+                        MY NFT
                       </Text>
-                    </div> */}
-                  </div>
-                  <div
-                    className="common-pointer flex flex-col font-urbanist items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/saved")}
-                  >
-                    {/* <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[39%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_clock.svg"
-                        alt="clock One"
-                      />
-                      <Text
-                        className="text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                      >
-                        Saved
-                      </Text>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>
-              {/* <div className="flex flex-col gap-4 justify-start w-full">
-                <Text
-                  className="ml-4 md:ml-[0] text-gray-901 text-xs tracking-[0.12px]"
-                  size="txtUrbanistMedium12Gray901"
-                >
-                  MY PROFILE
-                </Text>
-                <div className="flex flex-col gap-2 items-center justify-start w-full">
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/myprofilecollection")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-1/2 md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_user_24X24.svg"
-                        alt="user One"
-                      />
-                      <Text
-                        className="text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                      >
-                        Collection
-                      </Text>
-                    </div>
-                  </div>
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/myprofilewallet")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[38%] md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_computer.svg"
-                        alt="computer"
-                      />
-                      <Text
-                        className="text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                      >
-                        Wallet
-                      </Text>
-                    </div>
-                  </div>
-                  <div
-                    className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/myprofilehistory")}
-                  >
-                    <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-2/5 md:w-full">
-                      <Img
-                        className="h-6 w-6"
-                        src="images/img_clock_24X24.svg"
-                        alt="clock Two"
-                      />
-                      <Text
-                        className="text-gray-500 text-lg tracking-[0.18px]"
-                        size="txtUrbanistMedium18"
-                      >
-                        History
-                      </Text>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
             </div>
-            <div className="font-urbanist md:h-[246px] h-[258px] ml-4 md:ml-[0] relative w-[88%]">
+            <div className="font-urbanist h-[258px] md:h-[263px] mb-[17px] ml-4 md:ml-[0] relative w-[88%]">
               <div className="absolute bg-gray-900 bottom-[0] h-[233px] inset-x-[0] mx-auto rounded-[15px] w-[234px]"></div>
               <div className="absolute flex flex-col gap-3.5 inset-x-[0] items-center justify-start mx-auto top-[0] w-[91%]">
                 <Button
