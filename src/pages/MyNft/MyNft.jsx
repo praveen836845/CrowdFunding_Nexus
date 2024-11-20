@@ -38,54 +38,52 @@ const MyNft = ({ onSubmit }) => {
   });
 
   const {
-      data : NFTdata,
-     isErroroccur,
+    data: NFTdata,
+    isErroroccur,
     isLoading: contractLoadings,
   } = useReadContract({
     address: CONTRACT_ADDRESS,
     abi: CrowdFundingABI,
     functionName: "getNFTsForAccount",
-    args: [address]
+    args: [address],
   });
 
   // console.log(data  , "getCampaign" );
   // console.log(NFTdata, "NFTData");
- 
+
   let matchedData;
   if (NFTdata) {
-    matchedData = NFTdata.filter(newItem => {
+    matchedData = NFTdata.filter((newItem) => {
       console.log("inside the Main loop");
-      
+
       const matchingCampaign = data.find(
-        campaign => campaign.nftContract === newItem.nftContract
+        (campaign) => campaign.nftContract === newItem.nftContract
       );
-  
+
       if (matchingCampaign) {
         console.log("matched", matchingCampaign);
         const matchingTier = matchingCampaign.tiers.find(
-          tier => tier.tier === newItem.tier
+          (tier) => tier.tier === newItem.tier
         );
-        
+
         if (matchingTier) {
           // Add tier image (URI) to the newItem
           newItem.tierImage = matchingTier.uri;
           return true;
         }
       }
-      
+
       return false;
     });
   }
 
-  console.log("NFTlisted" , matchedData);
-  // matchedData = [{
-  //   tierImage : 'https://gateway.pinata.cloud/ipfs/QmQBpkP3F5WzxHaEc4UQEDS5GxoZcCfRe6XFttzHfSqkca'
-  // }]
-
-
-
-
-  
+  console.log("NFTlisted", matchedData);
+  matchedData = [
+    {
+      tierImage:
+        "https://gateway.pinata.cloud/ipfs/QmQBpkP3F5WzxHaEc4UQEDS5GxoZcCfRe6XFttzHfSqkca",
+    },
+  ];
 
   useEffect(() => {
     if (!data) return;
@@ -99,7 +97,7 @@ const MyNft = ({ onSubmit }) => {
     }
 
     processCampaigns();
-  }, [data, card , NFTdata]);
+  }, [data, card, NFTdata]);
 
   const formatTime = (seconds) => {
     const h = Math.floor(seconds / 3600);
@@ -131,7 +129,7 @@ const MyNft = ({ onSubmit }) => {
             orientation="horizontal"
           >
             {matchedData?.map((campaign, index) => {
-              // const isButtonDisabled = 
+              // const isButtonDisabled =
               // //   campaign.isEnded ||
               // //   campaign.currentRaised >= campaign.donationTarget;
 
@@ -144,20 +142,141 @@ const MyNft = ({ onSubmit }) => {
                   className="bg-white-A700 flex flex-1 flex-col gap-5 items-center justify-start p-1.5 rounded-[15px] shadow-bs1 w-full"
                   key={index}
                 >
+                  {/* this is the image container */}
+
                   <div
-                    className="bg-cover bg-no-repeat flex flex-col h-[140px] items-end justify-start p-2 rounded-[12px] w-full"
+                    className="  bg-cover bg-no-repeat gap-5 items-center justify-start  rounded-[15px]  w-full  "
                     style={{
                       backgroundImage: `url(${campaign.tierImage})`,
                     }}
                   >
-                    <div className="flex flex-row gap-2 items-center justify-end mb-[94px] w-[55%] md:w-full">
+                    <div
+                      className=" bg-black bg-opacity-80  flex flex-col items-end justify-start rounded-[15px]   w-full"
+                      // style={{ filter: "brightness(1) contrast(1.2) " }}
+                    >
+                      <div className="flex flex-col gap-[18px] items-start justify-start mb-3 mr-2 w-[93%] md:w-full  ">
+                        <div className="flex flex-row justify-between w-full mr-6 mt-4">
+                          <div className="flex flex-col items-start justify-start">
+                            <Text
+                              // className="text-base text-black-900 tracking-[0.16px]"
+                              className="text-base   text-white-A700  tracking-[0.16px]"
+                              size="txtUrbanistSemiBold16"
+                            >
+                              {"NFT"}
+                            </Text>
+                            <Text
+                              className="mt-1 text-white-A700   text-gray-500 text-xs tracking-[0.12px]"
+                              size="txtUrbanistMedium12Gray500"
+                            >
+                              {campaign.creator}
+                            </Text>
+                          </div>
+                          {/* <Img
+                      className="h-[18px] mr-2 mt-2"
+                      src="images/img_heart.svg"
+                      alt="heart Two"
+                    />  */}
+                          <div className="flex flex-row gap-2 items-center justify-end  mr-2 w-[55%] md:w-full">
+                            <Button
+                              className="cursor-pointer font-medium min-w-[75px] rounded-[14px] text-center text-xs tracking-[0.12px]"
+                              color="gray_900_26"
+                              size="xs"
+                              variant="fill"
+                            ></Button>
+                            <Button
+                              className="flex h-[30px] items-center justify-center rounded-[50%] w-[30px]"
+                              shape="circle"
+                              color="gray_900_26"
+                              size="xs"
+                              variant="fill"
+                            >
+                              <Img
+                                className="h-[18px]"
+                                src="images/img_heart.svg"
+                                alt="heart Two"
+                              />
+                            </Button>
+                          </div>
+                        </div>
+                        {true && (
+                          <div className="w-full mt-2">
+                            <Text
+                              className="text-[10px]  text-white-A700  tracking-[0.10px]"
+                              size="txtOutfitRegular10"
+                            >
+                              Donation Target:{" "}
+                              {campaign.currentRaised / campaign.donationTarget}{" "}
+                              ETH
+                            </Text>
+                            <div className="w-full   bg-white-A700 bg-gray-200  rounded-full h-2 mt-1">
+                              <div
+                                className="bg-blue-500 h-2 rounded-full"
+                                style={{
+                                  width: `${
+                                    (campaign.currentRaised /
+                                      campaign.donationTarget) *
+                                    100
+                                  }%`,
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                        )}
+                        <div className="flex flex-row gap-[38px] items-center justify-between w-full">
+                          <div className="flex flex-col font-outfit items-start justify-start">
+                            <Text
+                              className="text-[10px]  text-white-A700  text-gray-500tracking-[0.10px]"
+                              size="txtOutfitRegular10"
+                            >
+                              {campaign.isDonation
+                                ? "Current Collection"
+                                : "Total Collection"}
+                            </Text>
+                            <div
+                              className="flex flex-row font-urbanist gap-1.5 items-center justify-start mt-1 w-[98%] md:w-full"
+                             
+                            >
+                              <Img
+                                className="h-4 w-4 bg-white-A700 "
+                                src="images/img_sort.svg"
+                                alt="sort Two"
+                               
+                              />
+                              <Text
+                                className="text-black-900 text-sm tracking-[0.14px]"
+                                size="txtUrbanistMedium14Black900"
+                              >
+                                {/* {formatUnits(campaign.target).toString()} */}
+                              </Text>
+                            </div>
+                          </div>
+
+                          <Link to={"/"}>
+                            <Button
+                              className="cursor-pointer font-medium font-urbanist min-w-[88px] rounded-lg text-center text-xs tracking-[0.12px]"
+                              shape="round"
+                              color="gray_900"
+                              size="xs"
+                              variant="fill"
+                              disabled={true}
+                              // onClick={handleShowClick}
+                              onClick={handleCardClick}
+
+                              // onClick={() => HandleDonateClick(index)}
+                            >
+                              {/* {campaign.isDonation ? "Donate" : "Donate"} */}
+                              List For Sale
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                      {/* <div className="flex flex-row gap-2 items-center justify-end mb-[94px] w-[55%] md:w-full">
                       <Button
                         className="cursor-pointer font-medium min-w-[75px] rounded-[14px] text-center text-xs tracking-[0.12px]"
                         color="gray_900_26"
                         size="xs"
                         variant="fill"
                       >
-                        {/* {formatTime(campaign.timeLeft)} */}
                       </Button>
                       <Button
                         className="flex h-[30px] items-center justify-center rounded-[50%] w-[30px]"
@@ -172,92 +291,13 @@ const MyNft = ({ onSubmit }) => {
                           alt="heart Two"
                         />
                       </Button>
-                    </div>
+                    </div> */}
+                    </div>{" "}
                   </div>
-                  <div className="flex flex-col gap-[18px] items-start justify-start mb-3 w-[93%] md:w-full">
-                    <div className="flex flex-col items-start justify-start">
-                      <Text
-                        className="text-base text-black-900 tracking-[0.16px]"
-                        size="txtUrbanistSemiBold16"
-                      >
-                        {"NFT"}
-                      </Text>
-                      <Text
-                        className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
-                        size="txtUrbanistMedium12Gray500"
-                      >
-                        {campaign.creator}
-                      </Text>
-                    </div>
-                    {true && (
-                      <div className="w-full mt-2">
-                        <Text
-                          className="text-[10px] text-gray-500 tracking-[0.10px]"
-                          size="txtOutfitRegular10"
-                        >
-                          Donation Target:{" "}
-                          {campaign.currentRaised / campaign.donationTarget} ETH
-                        </Text>
-                        <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                          <div
-                            className="bg-blue-500 h-2 rounded-full"
-                            style={{
-                              width: `${
-                                (campaign.currentRaised /
-                                  campaign.donationTarget) *
-                                100
-                              }%`,
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-                    )}
-                    <div className="flex flex-row gap-[38px] items-center justify-between w-full">
-                      <div className="flex flex-col font-outfit items-start justify-start">
-                        <Text
-                          className="text-[10px] text-gray-500 tracking-[0.10px]"
-                          size="txtOutfitRegular10"
-                        >
-                          {campaign.isDonation
-                            ? "Current Collection"
-                            : "Total Collection"}
-                        </Text>
-                        <div className="flex flex-row font-urbanist gap-1.5 items-center justify-start mt-1 w-[98%] md:w-full">
-                          <Img
-                            className="h-4 w-4"
-                            src="images/img_sort.svg"
-                            alt="sort Two"
-                          />
-                          <Text
-                            className="text-black-900 text-sm tracking-[0.14px]"
-                            size="txtUrbanistMedium14Black900"
-                          >
-                            {/* {formatUnits(campaign.target).toString()} */}
-                          </Text>
-                        </div>
-                      </div>
+                  {/* this is the bottom div */}
 
-                      <Link to={"/"}>
-                        <Button
-                          className="cursor-pointer font-medium font-urbanist min-w-[88px] rounded-lg text-center text-xs tracking-[0.12px]"
-                          shape="round"
-                          color="gray_900"
-                          size="xs"
-                          variant="fill"
-                          disabled={true}
-                          // onClick={handleShowClick}
-                          onClick={handleCardClick}
-
-                          // onClick={() => HandleDonateClick(index)}
-                        >
-                          {/* {campaign.isDonation ? "Donate" : "Donate"} */}
-                          List For Sale
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
                   <div>
-                  {/* {
+                    {/* {
   campaignData[3].tiers.map((tier, index) => { return(
     <div>{tier.uri}</div>
   )})
