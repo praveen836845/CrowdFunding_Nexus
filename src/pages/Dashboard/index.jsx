@@ -78,6 +78,9 @@ const DashboardPage = ({ onSubmit }) => {
     }
   }
 
+
+  
+
   const handalerCardView = () => {
     setCard(true);
   };
@@ -614,7 +617,8 @@ const DashboardPage = ({ onSubmit }) => {
                       campaign.isEnded ||
                       campaign.currentRaised >= campaign.donationTarget;
 
-                    const handleCardClick = () => {
+                    const handleCardClick = (index) => {
+                      campaign.index = index
                       setCampaign(campaign); // Store the selected campaign in Context
                     };
 
@@ -724,7 +728,7 @@ const DashboardPage = ({ onSubmit }) => {
                                 variant="fill"
                                 disabled={isButtonDisabled}
                                 // onClick={handleShowClick}
-                                onClick={handleCardClick}
+                                onClick={() => {handleCardClick(index)}}
 
                                 // onClick={() => HandleDonateClick(index)}
                               >

@@ -43,7 +43,7 @@ const CardView = () => {
   const isActive = location.pathname.includes("card-view");
 
 
-  const HandleDonateClick = async (campaignId) => {
+  const HandleDonateClick = async (campaignId = 0) => {
     console.log(`Button clicked for campaign ID: ${campaignId}`);
     const donationAmount = prompt("Enter the amount to donate (in ETH):");
 
@@ -62,7 +62,7 @@ const CardView = () => {
         address: CONTRACT_ADDRESS,
         abi: CrowdFundingABI,
         functionName: "donateToCampaign",
-        args: [campaignId],
+        args: [0],
         value: parseEther(donationAmount),
       });
       console.log("Donated Successfully: ", hash);
@@ -503,7 +503,8 @@ console.log(hours , minutes , seconds)
                     color="gray_900"
                     size="2xl"
                     variant="fill"
-                    onClick ={HandleDonateClick}
+                    onClick ={(e) => {
+                      HandleDonateClick()}}
                   >
                     Donate
                   </Button>

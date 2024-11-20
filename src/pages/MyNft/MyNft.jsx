@@ -4,8 +4,12 @@ import CreateCampaign from "pages/Createcampaign";
 import WalletButton from "pages/Walletconnect";
 
 import { Button, Img, List, Text } from "components";
-import { useReadContract } from "wagmi";
-import { CrowdFundingABI } from "../../abi/constants";
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+  useReadContract,
+} from "wagmi";import { CrowdFundingABI } from "../../abi/constants";
 import { CrowdFundingAddress } from "../../abi/constants";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -16,6 +20,7 @@ import SideBar from "components/Sidebar/SideBar";
 
 const MyNft = ({ onSubmit }) => {
   const [card, setCard] = useState(false);
+  const { address, isConnected } = useAccount(); // This is the client address
 
   const [campaignData, setCampaignData] = useState([]);
   const CONTRACT_ADDRESS = CrowdFundingAddress;
@@ -31,6 +36,48 @@ const MyNft = ({ onSubmit }) => {
     functionName: "getCampaigns",
   });
 
+  const {
+      data : NFTdata,
+     isErroroccur,
+    isLoading: contractLoadings,
+  } = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: CrowdFundingABI,
+    functionName: "getNFTsForAccount",
+    args: [address]
+  });
+
+  console.log(data  , "getCampaign" );
+  console.log(NFTdata, "NFTData");
+  let matchedData;
+  if (NFTdata) {
+    matchedData = NFTdata.filter(newItem => {
+      console.log("inside the Main loop");
+      
+      const matchingCampaign = data.find(
+        campaign => campaign.nftContract === newItem.nftContract
+      );
+  
+      if (matchingCampaign) {
+        console.log("matched", matchingCampaign);
+        const matchingTier = matchingCampaign.tiers.find(
+          tier => tier.tier === newItem.tier
+        );
+        
+        if (matchingTier) {
+          // Add tier image (URI) to the newItem
+          newItem.tierImage = matchingTier.uri;
+          return true;
+        }
+      }
+      
+      return false;
+    });
+  }
+
+  console.log("NFTlisted" , matchedData);
+
+
   useEffect(() => {
     if (!data) return;
 
@@ -43,7 +90,7 @@ const MyNft = ({ onSubmit }) => {
     }
 
     processCampaigns();
-  }, [data, card]);
+  }, [data, card , NFTdata]);
 
   const formatTime = (seconds) => {
     const h = Math.floor(seconds / 3600);
@@ -213,10 +260,10 @@ const MyNft = ({ onSubmit }) => {
             className="sm:flex-col flex-row gap-[19px] grid sm:grid-cols-1 md:grid-cols-2 grid-cols-3 justify-center w-full"
             orientation="horizontal"
           >
-            {campaignData.map((campaign, index) => {
-              const isButtonDisabled =
-                campaign.isEnded ||
-                campaign.currentRaised >= campaign.donationTarget;
+            {matchedData.map((campaign, index) => {
+              // const isButtonDisabled = 
+              // //   campaign.isEnded ||
+              // //   campaign.currentRaised >= campaign.donationTarget;
 
               const handleCardClick = () => {
                 setCampaign(campaign); // Store the selected campaign in Context
@@ -230,7 +277,7 @@ const MyNft = ({ onSubmit }) => {
                   <div
                     className="bg-cover bg-no-repeat flex flex-col h-[140px] items-end justify-start p-2 rounded-[12px] w-full"
                     style={{
-                      backgroundImage: `url(${campaign.image})`,
+                      backgroundImage: `url(${campaign.tierImage})`,
                     }}
                   >
                     <div className="flex flex-row gap-2 items-center justify-end mb-[94px] w-[55%] md:w-full">
@@ -240,7 +287,7 @@ const MyNft = ({ onSubmit }) => {
                         size="xs"
                         variant="fill"
                       >
-                        {formatTime(campaign.timeLeft)}
+                        {/* {formatTime(campaign.timeLeft)} */}
                       </Button>
                       <Button
                         className="flex h-[30px] items-center justify-center rounded-[50%] w-[30px]"
@@ -263,7 +310,7 @@ const MyNft = ({ onSubmit }) => {
                         className="text-base text-black-900 tracking-[0.16px]"
                         size="txtUrbanistSemiBold16"
                       >
-                        {campaign.title}
+                        {"NFT"}
                       </Text>
                       <Text
                         className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
@@ -272,7 +319,7 @@ const MyNft = ({ onSubmit }) => {
                         {campaign.creator}
                       </Text>
                     </div>
-                    {campaign.isDonation && (
+                    {true && (
                       <div className="w-full mt-2">
                         <Text
                           className="text-[10px] text-gray-500 tracking-[0.10px]"
@@ -315,7 +362,7 @@ const MyNft = ({ onSubmit }) => {
                             className="text-black-900 text-sm tracking-[0.14px]"
                             size="txtUrbanistMedium14Black900"
                           >
-                            {formatUnits(campaign.target).toString()}
+                            {/* {formatUnits(campaign.target).toString()} */}
                           </Text>
                         </div>
                       </div>
@@ -327,7 +374,7 @@ const MyNft = ({ onSubmit }) => {
                           color="gray_900"
                           size="xs"
                           variant="fill"
-                          disabled={isButtonDisabled}
+                          disabled={true}
                           // onClick={handleShowClick}
                           onClick={handleCardClick}
 
