@@ -2,11 +2,20 @@ import React from "react";
 
 import { Sidebar } from "react-pro-sidebar";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+  useReadContract,
+} from "wagmi";
+import { CrowdFundingABI } from "../../abi/constants";
+import { CrowdFundingAddress } from "../../abi/constants";
 
 import { Button, Img, Input, Line, List, SelectBox, Text } from "components";
 
 import { CloseSVG } from "../../assets/images";
 import { useCampaignContext } from "pages/CampaignProvider";
+import { formatUnits, parseEther } from "ethers";
 
 const userTwoOptionsList = [
   { label: "Option1", value: "option1" },
@@ -21,7 +30,8 @@ const CardView = () => {
   // console.log("selectedCard", selectedCard);
 
   const { campaign } = useCampaignContext();
-
+  const { writeContractAsync, isPending } = useWriteContract();
+  const CONTRACT_ADDRESS = CrowdFundingAddress;
 
   const navigate = useNavigate();
 
@@ -31,6 +41,45 @@ const CardView = () => {
 
   // Check if the current route contains 'card-view'
   const isActive = location.pathname.includes("card-view");
+
+
+  const HandleDonateClick = async (campaignId) => {
+    console.log(`Button clicked for campaign ID: ${campaignId}`);
+    const donationAmount = prompt("Enter the amount to donate (in ETH):");
+
+    // Ensure the user entered a valid number
+    if (
+      !donationAmount ||
+      isNaN(donationAmount) ||
+      parseFloat(donationAmount) <= 0
+    ) {
+      alert("Please enter a valid donation amount.");
+      return;
+    }
+
+    try {
+      const hash = await writeContractAsync({
+        address: CONTRACT_ADDRESS,
+        abi: CrowdFundingABI,
+        functionName: "donateToCampaign",
+        args: [campaignId],
+        value: parseEther(donationAmount),
+      });
+      console.log("Donated Successfully: ", hash);
+    } catch (error) {
+      console.error("Error donating to campaign: ", error);
+    }
+  };
+
+  console.log("data of particular campaign" , campaign);
+  const {deadline , image , title} = campaign;
+  console.log("deadline", deadline);
+  const date = new Date(Number(deadline) * 1000);
+  console.log("date" , date)
+  const hours = date.getUTCHours();
+const minutes = date.getUTCMinutes();
+const seconds = date.getUTCSeconds();
+console.log(hours , minutes , seconds)
 
   return (
     <>
@@ -115,7 +164,7 @@ const CardView = () => {
                 <div className="flex flex-col gap-2 items-center justify-start w-full">
                   <div
                     className="common-pointer flex flex-col items-start justify-start p-2.5 w-full"
-                    onClick={() => navigate("/marketdetail")}
+                    onClick={() => navigate("/market")}
                   >
                     <div className="flex flex-row gap-[18px] items-center justify-start ml-1.5 md:ml-[0] w-[54%] md:w-full">
                       <Img
@@ -290,7 +339,7 @@ const CardView = () => {
             <div className="flex md:flex-col flex-row md:gap-[50px] items-center justify-between mt-[34px] w-[99%] md:w-full">
               <Img
                 className="h-[420px] md:h-auto object-cover rounded-[12px]"
-                src={campaign.image}
+                src={image}
                 alt="Rectangle2054"
               />
               <div className="flex flex-col items-start justify-start">
@@ -299,7 +348,7 @@ const CardView = () => {
                     className="md:text-3xl sm:text-[28px] text-[32px] text-black-900 tracking-[0.32px]"
                     size="txtUrbanistSemiBold32Black900"
                   >
-                    {campaign.title}
+                    {"title"}
                   </Text>
                   <Text
                     className="leading-[180.00%] text-base text-gray-500_ab tracking-[0.16px] w-full"
@@ -380,7 +429,7 @@ const CardView = () => {
                         size="xs"
                         variant="fill"
                       >
-                        03
+                        {hours}
                       </Button>
                       <Img
                         className="h-2.5 w-2.5"
@@ -394,7 +443,7 @@ const CardView = () => {
                         size="xs"
                         variant="fill"
                       >
-                        12
+                        {minutes}
                       </Button>
                       <Img
                         className="h-2.5 w-2.5"
@@ -408,7 +457,7 @@ const CardView = () => {
                         size="xs"
                         variant="fill"
                       >
-                        42
+                        {seconds}
                       </Button>
                     </div>
                   </div>
@@ -454,8 +503,9 @@ const CardView = () => {
                     color="gray_900"
                     size="2xl"
                     variant="fill"
+                    onClick ={HandleDonateClick}
                   >
-                    Place A Bid
+                    Donate
                   </Button>
                 </div>
               </div>
@@ -541,15 +591,15 @@ const CardView = () => {
                             </Text>
                           </div>
                         </div>
-                        <Button
+                        {/* <Button
                           className="cursor-pointer font-medium font-urbanist min-w-[88px] rounded-lg text-center text-xs tracking-[0.12px]"
                           shape="round"
                           color="gray_900"
                           size="xs"
                           variant="fill"
                         >
-                          Place a Bid
-                        </Button>
+              
+                        </Button> */}
                       </div>
                     </div>
                   </div>
