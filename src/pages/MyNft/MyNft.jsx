@@ -84,14 +84,14 @@ const MyNft = ({ onSubmit }) => {
   //   tierImage : 'https://gateway.pinata.cloud/ipfs/QmQBpkP3F5WzxHaEc4UQEDS5GxoZcCfRe6XFttzHfSqkca'
   // }]
 
-  const HandleApprove = async() => {
+  const HandleApprove = async(campaignid , nftContract , targetId) => {
     try {
-      console.log("changes in the inside")
+      console.log("changes in the inside" , campaignid , nftContract , targetId)
       const hash = await writeContractAsync({
-        address: "0xa55f62464137C37D2aE88320b5042721416CD1B5",
+        address: nftContract,
         abi: CampaignNFTABI,
         functionName: 'approve',
-        args: ["0xa55f62464137C37D2aE88320b5042721416CD1B5" , 1],
+        args: [CONTRACT_ADDRESS , targetId],
       });
       console.log("Donated Successfully: ", hash);
       
@@ -262,7 +262,7 @@ const MyNft = ({ onSubmit }) => {
                          
                           // onClick={handleShowClick}
                           // onClick={handleCardClick}
-                          onClick = {() => {HandleApprove()}}
+                          onClick = {() => {HandleApprove(campaign.campaignId , campaign.nftContract , campaign.tokenId)}}
 
                           // onClick={() => HandleDonateClick(index)}
                         >
