@@ -58,7 +58,7 @@ const DashboardPage = ({ onSubmit }) => {
     functionName: "getDonations",
     args: [address],
   });
-  console.log(">>>> getDonationdata", donationsData);
+  console.log(">>>> getDonationdata", donation); 
   async function fetchFileFromIPFS(url) {
     // const url = `https://${GATEWAY}/ipfs/${cid}`;
     try {

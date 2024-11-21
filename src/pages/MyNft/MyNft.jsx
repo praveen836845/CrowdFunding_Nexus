@@ -18,7 +18,7 @@ import { CrowdFundingABI } from "../../abi/constants";
 import { CrowdFundingAddress } from "../../abi/constants";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Contract, formatUnits, parseEther } from "ethers";
+import { Contract, formatUnits, parseEther , formatEther} from "ethers";
 import { Link } from "react-router-dom";
 import { useCampaignContext } from "pages/CampaignProvider";
 import SideBar from "components/Sidebar/SideBar";
@@ -65,7 +65,7 @@ const MyNft = ({ onSubmit }) => {
         (campaign) => campaign.nftContract === newItem.nftContract
       );
 
-      if (matchingCampaign) {
+      if (matchingCampaign && matchingCampaign.isActive) {
         console.log("matched", matchingCampaign);
         const matchingTier = matchingCampaign.tiers.find(
           (tier) => tier.tier === newItem.tier
@@ -105,7 +105,8 @@ const MyNft = ({ onSubmit }) => {
   // }
 
   const HandleApprove = async (campaignid, nftContract, tokenId) => {
-    try {
+    try { 
+      
       // Display loading toast message
       await toast.promise(
         (async () => {
@@ -165,23 +166,24 @@ const MyNft = ({ onSubmit }) => {
 const HandleNFTlistsale = async (campaignId, nftContract, tokenId) => {
   try {
     // Display loading toast message for the entire listing process
+    await HandleApprove(campaignId, nftContract, tokenId);
     await toast.promise(
       (async () => {
         console.log("changes in the inside", campaignId, nftContract, tokenId);
 
-        // First, handle the approval process
-        await HandleApprove(campaignId, nftContract, tokenId);
-
+        const price = prompt("Set the price of NFT (in ETH):");
+        const priceset  = parseEther(price).toString()
+        console.log(priceset , typeof priceset);
         // Then, list the NFT for sale
         const hash = await writeContractAsync({
           address: CONTRACT_ADDRESS,
           abi: CrowdFundingABI,
           functionName: "listNFTForSale",
-          args: [campaignId, tokenId, "1000000000000000000"], // Price in wei (1 ETH = 1000000000000000000 wei)
+          args: [campaignId, tokenId, priceset], // Price in wei (1 ETH = 1000000000000000000 wei)
         });
 
         console.log("Successfully Listed", hash);
-        return hash; // Return the transaction hash for use in the success toast
+        return "Successfully Listed"; // Return the transaction hash for use in the success toast
       })(),
       {
         loading: `Listing NFT ${tokenId} for sale...`, // Loading message

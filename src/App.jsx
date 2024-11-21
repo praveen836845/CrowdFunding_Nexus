@@ -3,7 +3,7 @@ import React from "react";
 import Routes from "./Routes";
 import '@rainbow-me/rainbowkit/styles.css';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-
+import { Toaster } from 'react-hot-toast';
 
 import {
   getDefaultConfig,
@@ -67,6 +67,8 @@ function App() {
         <ProSidebarProvider>
         <ConnectButton />
         <Routes />
+        <Toaster  position="bottom-right"
+         reverseOrder={true}/>
       </ProSidebarProvider>
       </RainbowKitProvider>
       </QueryClientProvider>

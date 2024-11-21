@@ -10,7 +10,7 @@ import {
 } from "wagmi";
 import { CrowdFundingABI } from "../../abi/constants";
 import { CrowdFundingAddress } from "../../abi/constants";
-
+import toast from "react-hot-toast";
 import { Button, Img, Input, Line, List, SelectBox, Text } from "components";
 
 import { CloseSVG } from "../../assets/images";
@@ -59,16 +59,24 @@ const CardView = () => {
     }
 
     try {
-      const hash = await writeContractAsync({
-        address: CONTRACT_ADDRESS,
-        abi: CrowdFundingABI,
-        functionName: "donateToCampaign",
-        args: [campaignId],
-        value: parseEther(donationAmount),
-      });
-      console.log("Donated Successfully: ", hash);
+      await toast.promise( (
+        async () => {
+          const hash = await writeContractAsync({
+            address: CONTRACT_ADDRESS,
+            abi: CrowdFundingABI,
+            functionName: "donateToCampaign",
+            args: [campaignId],
+            value: parseEther(donationAmount),
+          });
+        }
+      )() ,  {
+        loading: `Approving token ...`, // Loading state message
+        success: (hash) => `Approval successful! Transaction Hash:`, // Success state message with the hash
+        error: (error) => `Approval failed: `, // Error state message
+      })
+    
     } catch (error) {
-      console.error("Error donating to campaign: ", error);
+            toast.error("Error Caught" , error.message)
     }
   };
 

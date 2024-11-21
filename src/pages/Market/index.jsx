@@ -44,22 +44,22 @@ const MarketPage = () => {
  console.log(">>>>getAllCampaignListedNFTs" , ListedNFT);
 
 
-const HandlebuyNFT =  async(campaignId , tokenId , price)=> {
-  try {
-    //  error need to capture if the price is not matched (use the wagmi converter)
+// const HandlebuyNFT =  async(campaignId , tokenId , price)=> {
+//   try {
+//     //  error need to capture if the price is not matched (use the wagmi converter)
 
-    const hash = await writeContractAsync({
-      address: CONTRACT_ADDRESS,
-      abi: CrowdFundingABI,
-      functionName: "donateToCampaign",
-      args: [campaignId , tokenId],
-      value: parseEther(price),
-    });
-    console.log("Donated Successfully: ", hash);
-  } catch (error) {
-    console.error("Error donating to campaign: ", error);
-  }
-}
+//     const hash = await writeContractAsync({
+//       address: CONTRACT_ADDRESS,
+//       abi: CrowdFundingABI,
+//       functionName: "donateToCampaign",
+//       args: [campaignId , tokenId],
+//       value: parseEther(price),
+//     });
+//     console.log("Donated Successfully: ", hash);
+//   } catch (error) {
+//     console.error("Error donating to campaign: ", error);
+//   }
+// }
 
 
 

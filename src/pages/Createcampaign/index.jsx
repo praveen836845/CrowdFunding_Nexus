@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import { Sidebar } from "react-pro-sidebar";
 import { useNavigate } from "react-router-dom";
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from "wagmi";
-import { parseEther } from "viem";
+import { parseEther } from "ethers";
 
 import {CrowdFundingABI} from '../../abi/constants'
 import {CrowdFundingAddress} from '../../abi/constants'
+import { toast } from "react-hot-toast"; 
 
 import './index.css';
 
 import { Button, Img, Text } from "components";
 import { uploadFile } from "utils/upload";
+// import { parse } from "dotenv";
 
 
 const ShopInfoForm = ({ onSubmit }) => {
@@ -84,44 +86,17 @@ const ShopInfoForm = ({ onSubmit }) => {
     }
   };
 
-  const donateToCampaign = async (campaignId, amount) => {
-    try {
-      const hash = await writeContractAsync({
-        address: CONTRACT_ADDRESS,
-        abi: CrowdFundingABI,
-        functionName: 'donateToCampaign',
-        args: [campaignId],
-      });
-      console.log("Donated Successfully: ", hash);
-      
-    } catch (error) {
-      console.error("Error donating to campaign: ", error);
-    }
-  }
-
-  // const getCampaigns = async () => {
+  // const donateToCampaign = async (campaignId, amount) => {
   //   try {
-  //     const campaigns = await useReadContract({
+  //     const hash = await writeContractAsync({
   //       address: CONTRACT_ADDRESS,
   //       abi: CrowdFundingABI,
-  //       functionName: 'getCampaigns'
+  //       functionName: 'donateToCampaign',
+  //       args: [campaignId],
   //     });
-  //     console.log("Campaigns: ", campaigns);
+  //     console.log("Donated Successfully: ", hash);
   //   } catch (error) {
-  //     console.error("Error getting campaigns: ", error);
-  //   }
-  // }
-
-  // const getDonations = async () => {
-  //   try {
-  //     const donations = await useReadContract({
-  //       address: CONTRACT_ADDRESS,
-  //       abi: CrowdFundingABI,
-  //       functionName: 'getDonations',
-  //       args: [address]
-  //     })
-  //   } catch (error) {
-      
+  //     console.error("Error donating to campaign: ", error);
   //   }
   // }
 
@@ -132,57 +107,64 @@ const ShopInfoForm = ({ onSubmit }) => {
       alert("Please fill all the fields");
       return;
     }
-
+ 
     console.log("Upload file to ipfs");
-    // const imageIPFS = await uploadFile(image);
-    // setImageURI(`https://${GATEWAY}/ipfs/${imageIPFS}`);
-    // const tier1IPFS = await uploadFile(tier1Image);
-    // setTier1URI(`https://${GATEWAY}/ipfs/${tier1IPFS}`);
-    // const tier2IPFS = await uploadFile(tier2Image);
-    // setTier2URI(`https://${GATEWAY}/ipfs/${tier2IPFS}`);
-    // const tier3IPFS = await uploadFile(tier3Image);
-    // setTier3URI(`https://${GATEWAY}/ipfs/${tier3IPFS}`);
-    const [imageIPFS, tier1IPFS, tier2IPFS, tier3IPFS] = await Promise.all([
-      uploadFile(image),
-      uploadFile(tier1Image),
-      uploadFile(tier2Image),
-      uploadFile(tier3Image)
-    ]);
-
-    // Create the URIs
-    const finalImageURI = `https://${GATEWAY}/ipfs/${imageIPFS}`;
-    const finalTier1URI = `https://${GATEWAY}/ipfs/${tier1IPFS}`;
-    const finalTier2URI = `https://${GATEWAY}/ipfs/${tier2IPFS}`;
-    const finalTier3URI = `https://${GATEWAY}/ipfs/${tier3IPFS}`;
-    console.log("Upload file to ipfs");
-    
-    console.log("check that this image is uploaded or not " , tier1IPFS)
-    const deadlineTimestamp = Math.floor(new Date(deadline).getTime() / 1000);
-
-    // Prepare contract call
-    console.log(">>>checking the URI and Images" ) ;
-    const  hash  =   await writeContractAsync({
-        address: CONTRACT_ADDRESS,
-        abi: CrowdFundingABI,
-        functionName: 'createCampaign',
-        args: [
-          address,                            
-          title,                            
-          description,                       
-          // parseEther(target.toString()),  
-          10000000,    
-           deadlineTimestamp,          
-          // parseEther(minAmount.toString()),
-            10000000,   
-            finalImageURI,                           // string memory _image
-            finalTier1URI,                           // string memory _tier1URI
-            finalTier2URI,                          // string memory _tier2URI
-            finalTier3URI                           // string memory _tier3URI
-        ],
-    });
-    console.log("transaction Hash is there" , hash);
-    setTransactionHash(hash);
- console.log("tranasaction has been called");
+    try {
+      await toast.promise((
+        async () => {
+          const [imageIPFS, tier1IPFS, tier2IPFS, tier3IPFS] = await Promise.all([
+            uploadFile(image),
+            uploadFile(tier1Image),
+            uploadFile(tier2Image),
+            uploadFile(tier3Image)
+          ]);
+      
+          const TARGET = parseEther(target).toString();
+          const MINAMOUNT = parseEther(minAmount).toString();
+          console.log("Target" , TARGET);
+          // Create the URIs
+          const finalImageURI = `https://${GATEWAY}/ipfs/${imageIPFS}`;
+          const finalTier1URI = `https://${GATEWAY}/ipfs/${tier1IPFS}`;
+          const finalTier2URI = `https://${GATEWAY}/ipfs/${tier2IPFS}`;
+          const finalTier3URI = `https://${GATEWAY}/ipfs/${tier3IPFS}`;
+          console.log("Upload file to ipfs");
+          
+          console.log("check that this image is uploaded or not " , tier1IPFS)
+          const deadlineTimestamp = Math.floor(new Date(deadline).getTime() / 1000);
+      
+          // Prepare contract call
+          console.log(">>>checking the URI and Images" ) ;
+          const  hash  =   await writeContractAsync({
+              address: CONTRACT_ADDRESS,
+              abi: CrowdFundingABI,
+              functionName: 'createCampaign',
+              args: [
+                address,                            
+                title,                            
+                description,                       
+                // parseEther(target.toString()),  
+                TARGET,    
+                 deadlineTimestamp,          
+                // parseEther(minAmount.toString()),
+                MINAMOUNT,   
+                  finalImageURI,                           // string memory _image
+                  finalTier1URI,                           // string memory _tier1URI
+                  finalTier2URI,                          // string memory _tier2URI
+                  finalTier3URI                           // string memory _tier3URI
+              ],
+          });
+        }
+      )() ,  {
+        loading: `Approving token ...`, // Loading state message
+        success: (hash) => `Approval successful! Transaction Hash:`, // Success state message with the hash
+        error: (error) => `Approval failed: ${error.message}`, // Error state message
+      });
+    }catch(err){
+      console.log("error message" , err.message);
+    }
+   
+    // console.log("transaction Hash is there" , hash);
+    // setTransactionHash(hash);
   };
 
 
