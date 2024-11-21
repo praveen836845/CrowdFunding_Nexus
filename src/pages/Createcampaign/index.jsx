@@ -128,7 +128,7 @@ const ShopInfoForm = ({ onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("checking that address" , address);
-    if (!owner || !title || !description || !target || !deadline || !minAmount || !image || !tier1Image || !tier2Image || !tier3Image) {
+    if ( !title || !description || !target || !deadline || !minAmount || !image || !tier1Image || !tier2Image || !tier3Image) {
       alert("Please fill all the fields");
       return;
     }
