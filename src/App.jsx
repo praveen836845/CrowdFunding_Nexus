@@ -51,7 +51,7 @@ const taikoHekla = {
   testnet: true
 } 
 
-const config = getDefaultConfig({
+export const config = getDefaultConfig({
   appName: 'CrowdFunding',
   projectId: '6e07e06754f47c098482b57c96800295',
   chains: [taikoHekla],

@@ -43,6 +43,7 @@ module.exports = {
       backgroundImage: {
         gradient: "linear-gradient(90deg ,#6271eb,#6170eb54)",
       },
+    
     },
   },
   plugins: [require("@tailwindcss/forms")],
