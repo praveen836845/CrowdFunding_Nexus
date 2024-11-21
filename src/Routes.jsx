@@ -5,6 +5,7 @@ import NotFound from "pages/NotFound";
 import { CampaignProvider } from "pages/CampaignProvider";
 import CardView from "pages/CardView/CardView";
 import MyNft from "pages/MyNft/MyNft";
+import Timer from "components/Timer";
 const MyProfileHistory = React.lazy(() => import("pages/MyProfileHistory"));
 const MyProfileWallet = React.lazy(() => import("pages/MyProfileWallet"));
 const MyProfileCollection = React.lazy(() =>
@@ -46,6 +47,7 @@ const ProjectRoutes = () => {
           <Route path="/myprofilewallet" element={<MyProfileWallet />} />
           <Route path="/myprofilehistory" element={<MyProfileHistory />} />
           <Route path="/create-campaign" element={<Createcampaign/>}/>
+          <Route path="/timer" element={<Timer/>}/>
          
         </Routes>
       </Router>

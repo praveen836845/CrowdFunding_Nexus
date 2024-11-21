@@ -82,7 +82,7 @@ const MyNft = ({ onSubmit }) => {
     });
   }
 
-  console.log("NFTlisted", matchedData);
+  // console.log("NFTlisted", matchedData);
   // matchedData = [{
   //   tierImage : 'https://gateway.pinata.cloud/ipfs/QmQBpkP3F5WzxHaEc4UQEDS5GxoZcCfRe6XFttzHfSqkca'
   // }]
@@ -296,7 +296,7 @@ const HandleNFTlistsale = async (campaignId, nftContract, tokenId) => {
                               size="xs"
                               variant="fill"
                             ></Button>
-                            <Button
+                            {/* <Button
                               className="flex h-[30px] items-center justify-center rounded-[50%] w-[30px]"
                               shape="circle"
                               color="gray_900_26"
@@ -308,20 +308,20 @@ const HandleNFTlistsale = async (campaignId, nftContract, tokenId) => {
                                 src="images/img_heart.svg"
                                 alt="heart Two"
                               />
-                            </Button>
+                            </Button> */}
                           </div>
                         </div>
                         {true && (
                           <div className="w-full mt-2">
-                            <Text
+                            {/* <Text
                               className="text-[10px]  text-white-A700  tracking-[0.10px]"
                               size="txtOutfitRegular10"
                             >
                               Donation Target:{" "}
                               {campaign.currentRaised / campaign.donationTarget}{" "}
                               ETH
-                            </Text>
-                            <div className="w-full   bg-white-A700 bg-gray-200  rounded-full h-2 mt-1">
+                            </Text> */}
+                            {/* <div className="w-full   bg-white-A700 bg-gray-200  rounded-full h-2 mt-1">
                               <div
                                 className="bg-blue-500 h-2 rounded-full"
                                 style={{
@@ -332,7 +332,7 @@ const HandleNFTlistsale = async (campaignId, nftContract, tokenId) => {
                                   }%`,
                                 }}
                               ></div>
-                            </div>
+                            </div> */}
                           </div>
                         )}
                         <div className="flex flex-row gap-[38px] items-center justify-between w-full">
@@ -343,14 +343,14 @@ const HandleNFTlistsale = async (campaignId, nftContract, tokenId) => {
                             >
                               {campaign.isDonation
                                 ? "Current Collection"
-                                : "Total Collection"}
+                                : ""}
                             </Text>
                             <div className="flex flex-row font-urbanist gap-1.5 items-center justify-start mt-1 w-[98%] md:w-full">
-                              <Img
+                              {/* <Img
                                 className="h-4 w-4 bg-white-A700 "
                                 src="images/img_sort.svg"
                                 alt="sort Two"
-                              />
+                              /> */}
                               <Text
                                 className="text-black-900 text-sm tracking-[0.14px]"
                                 size="txtUrbanistMedium14Black900"

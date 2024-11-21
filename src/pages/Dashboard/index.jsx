@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CreateCampaign from "pages/Createcampaign";
+
 //import Modal from "../../components/Modal";
 import WalletButton from "pages/Walletconnect";
 import { Sidebar } from "react-pro-sidebar";
@@ -20,6 +21,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { formatUnits, parseEther } from "ethers";
 import { Link } from "react-router-dom";
 import { useCampaignContext } from "pages/CampaignProvider";
+import Timer from "components/Timer";
 
 const campaigns = [
   { id: 1, name: "Save the Oceans" },
@@ -78,9 +80,6 @@ const DashboardPage = ({ onSubmit }) => {
     }
   }
 
-
-  
-
   const handalerCardView = () => {
     setCard(true);
   };
@@ -129,6 +128,55 @@ const DashboardPage = ({ onSubmit }) => {
   // }, []);
 
   console.log(">>>campigndata", campaignData);
+  // ///////////////////////////////////////////////////////
+  // Loop through the array, convert the deadline, and calculate the difference in minutes
+  // const calculateTimeDifferenceInMinutes = () => {
+  //   const currentTime = new Date(); // Get the current date and time
+  //   return data.map((item) => {
+  //     // Convert the deadline (in Unix timestamp) to a JavaScript Date object
+  //     const deadlineDate = new Date(Number(item.deadline) * 1000); // Convert from seconds to milliseconds
+
+  //     // Calculate the difference in milliseconds
+  //     const timeDifferenceMs = deadlineDate - currentTime;
+
+  //     // Convert the difference from milliseconds to minutes
+  //     const timeDifferenceMinutes = Math.floor(timeDifferenceMs / 60000); // 1 minute = 60000 milliseconds
+
+  //     return {
+  //       title: item.title,
+  //       timeDifferenceMinutes,
+  //       deadlineDate,
+  //     };
+  //   });
+  // };
+
+  // Loop through the array, convert the deadline, and calculate the difference in minutes and seconds
+  // const calculateTimeDifference = () => {
+  //   const currentTime = new Date(); // Get the current date and time
+
+  //   return campaignData.map(item => {
+  //     // Convert the deadline (in Unix timestamp) to a JavaScript Date object
+  //     const deadlineDate = new Date(Number(item.deadline) * 1000); // Convert from seconds to milliseconds
+
+  //     // Calculate the difference in milliseconds
+  //     const timeDifferenceMs = deadlineDate - currentTime;
+
+  //     // Convert the difference from milliseconds to total seconds
+  //     const timeDifferenceSeconds = Math.floor(timeDifferenceMs / 1000);
+
+  //     // Calculate minutes and remaining seconds
+  //     const minutes = Math.floor(timeDifferenceSeconds / 60);
+  //     const seconds = timeDifferenceSeconds % 60;
+
+  //     return {
+  //       title: item.title,
+  //       timeDifference: `${minutes} minutes ${seconds} seconds`,
+  //       deadlineDate
+  //     };
+  //   });
+  // };
+  //   console.log(calculateTimeDifference());
+  ///////////////////////////////////////////////////////////
   //NFts Ranking
   const users = [
     {
@@ -218,43 +266,10 @@ const DashboardPage = ({ onSubmit }) => {
 
   const dummyDonators = [
     {
-      name: "Uzachi #4390",
-      origin: "From Ragnarok Meta",
-      amount: "2.15 ETH",
-      avatar: "images/img_ellipse1018_1.png",
-    },
-    {
-      name: "Doodles #3486",
-      origin: "From Doodles",
-      amount: "4.42 ETH",
-      avatar: "images/img_ellipse1018_2.png",
-    },
-    {
-      name: "Murakami #2766",
-      origin: "From Murakami",
-      amount: "1.08 ETH",
-      avatar: "images/img_ellipse1018_3.png",
-    },
-    {
-      name: "Doodles #2761",
-      origin: "From Murakami",
-      amount: "4.4 ETH",
-      avatar: "images/img_ellipse1018_4.png",
-    },
-    {
-      name: "Peachy Puch#22",
-      origin: "From Mindblowonstudio",
-      amount: "5.62 ETH",
-      avatar: "images/img_ellipse1018_5.png",
-    },
-    {
-      name: "Gemmy #3723",
-      origin: "From GemmySolana",
-      amount: "5.32 ETH",
-      avatar: "images/img_ellipse1018_6.png",
+      campaignName: "EtherealEdge",
+      donation: "1000000000000000000",
     },
   ];
-
   //search bar
 
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -618,7 +633,7 @@ const DashboardPage = ({ onSubmit }) => {
                       campaign.currentRaised >= campaign.donationTarget;
 
                     const handleCardClick = (index) => {
-                      campaign.index = index
+                      campaign.index = index;
                       setCampaign(campaign); // Store the selected campaign in Context
                     };
 
@@ -640,7 +655,7 @@ const DashboardPage = ({ onSubmit }) => {
                               size="xs"
                               variant="fill"
                             >
-                              {formatTime(campaign.timeLeft)}
+                              <Timer deadline={campaign.deadline} />
                             </Button>
                             <Button
                               className="flex h-[30px] items-center justify-center rounded-[50%] w-[30px]"
@@ -717,7 +732,7 @@ const DashboardPage = ({ onSubmit }) => {
                                   className="text-black-900 text-sm tracking-[0.14px]"
                                   size="txtUrbanistMedium14Black900"
                                 >
-                                  {formatUnits(campaign.target).toString()}
+                                  {formatUnits(campaign.minimumAmount , 18)}
                                 </Text>
                               </div>
                             </div>
@@ -731,7 +746,9 @@ const DashboardPage = ({ onSubmit }) => {
                                 variant="fill"
                                 disabled={isButtonDisabled}
                                 // onClick={handleShowClick}
-                                onClick={() => {handleCardClick(index)}}
+                                onClick={() => {
+                                  handleCardClick(index);
+                                }}
 
                                 // onClick={() => HandleDonateClick(index)}
                               >
@@ -748,12 +765,12 @@ const DashboardPage = ({ onSubmit }) => {
               </div>
               <div className="flex flex-col gap-5 items-center justify-start mt-[30px] w-full">
                 <div className="flex flex-row sm:gap-10 items-center justify-between w-full">
-                  <Text
+                  {/* <Text
                     className="text-2xl md:text-[22px] text-black-900 sm:text-xl"
                     size="txtUrbanistSemiBold24"
                   >
                     NFT Rankings
-                  </Text>
+                  </Text> */}
                   {/* <Text
                 onClick={loadMoreUsers}
                 className="text-gray-900 text-sm tracking-[0.14px] cursor-pointer"
@@ -763,7 +780,7 @@ const DashboardPage = ({ onSubmit }) => {
               </Text> */}
                 </div>
                 <div className="flex flex-col gap-5 items-center justify-start w-full">
-                  <div className="flex sm:flex-col flex-row sm:gap-10 items-start justify-between pb-0.5 w-full">
+                  {/* <div className="flex sm:flex-col flex-row sm:gap-10 items-start justify-between pb-0.5 w-full">
                     <Text
                       className="text-gray-500 text-xs tracking-[0.12px]"
                       size="txtUrbanistMedium12Gray500"
@@ -790,11 +807,11 @@ const DashboardPage = ({ onSubmit }) => {
                         Campaigns
                       </Text>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="overflow-y-auto max-h-[400px] w-full">
                     {" "}
                     {/* Scrollable list */}
-                    <List
+                    {/* <List
                       className="flex flex-col items-center pr-[7px] w-full"
                       orientation="vertical"
                     >
@@ -854,7 +871,7 @@ const DashboardPage = ({ onSubmit }) => {
                           </div>
                         </div>
                       ))}
-                    </List>
+                    </List> */}
                   </div>
                 </div>
               </div>
@@ -887,15 +904,18 @@ const DashboardPage = ({ onSubmit }) => {
                       <div className="flex flex-row gap-4 items-center">
                         <Img
                           className="h-10 w-10 rounded-full"
-                          src={dummyDonators[index].avatar}
-                          alt={`${dummyDonators[index].name} avatar`}
+                          src="images/donate_eth.png"
+                          alt={`${dummyDonators[index].campaignName} avatar`}
                         />
                         <div className="flex flex-col">
                           <Text className="text-lg font-semibold text-black-900">
                             {donator.campaignName}
                           </Text>
-                          <Text className="text-sm text-gray-500">
+                          {/* <Text className="text-sm text-gray-500">
                             {dummyDonators[index].origin}
+                          </Text> */}
+                          <Text className="text-sm text-gray-500">
+                            {formatUnits(dummyDonators[0].donation, "ether")}
                           </Text>
                         </div>
                       </div>

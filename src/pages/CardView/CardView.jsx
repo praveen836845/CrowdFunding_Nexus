@@ -81,7 +81,7 @@ const CardView = () => {
   };
 
   console.log("data of particular campaign" , campaign);
-  const {deadline , image , title} = campaign;
+  const {deadline , image , title , minimumAmount} = campaign;
   console.log("deadline", deadline);
   const date = new Date(Number(deadline) * 1000);
   console.log("date" , date)
@@ -475,7 +475,7 @@ console.log(hours , minutes , seconds)
                       className="text-base text-gray-500_ab tracking-[0.16px]"
                       size="txtUrbanistMedium16Gray500ab"
                     >
-                      Current Bid
+                      minimum Bid
                     </Text>
                     <div className="flex flex-row gap-2.5 items-center justify-start w-full">
                       <Img
@@ -487,7 +487,7 @@ console.log(hours , minutes , seconds)
                         className="text-black-900 text-xl tracking-[0.20px]"
                         size="txtUrbanistSemiBold20"
                       >
-                        3,89 ETH
+                       {formatUnits(minimumAmount , 18)}
                       </Text>
                     </div>
                   </div>
@@ -541,13 +541,13 @@ console.log(hours , minutes , seconds)
                       key={index}
                     >
                       <div className="flex flex-row gap-2 items-center justify-end mb-[94px] w-[51%] md:w-full">
-                        <Button
+                        {/* <Button
                           className="cursor-pointer font-medium min-w-[75px] rounded-[14px] text-center text-xs tracking-[0.12px]"
                           color="gray_900_26"
                           size="xs"
                           variant="fill"
                         >
-                          2h 4m 32s
+                         
                         </Button>
                         <Button
                           className="flex h-[30px] items-center justify-center rounded-[50%] w-[30px]"
@@ -561,7 +561,7 @@ console.log(hours , minutes , seconds)
                             src="images/img_heart.svg"
                             alt="heart"
                           />
-                        </Button>
+                        </Button> */}
                       </div>
                     </div>
                     <div className="flex flex-col gap-[18px] items-start justify-start mb-3 w-[94%] md:w-full">
@@ -570,13 +570,13 @@ console.log(hours , minutes , seconds)
                           className="text-base text-black-900 tracking-[0.16px]"
                           size="txtUrbanistSemiBold16"
                         >
-                          {data.threshold.toString()}
+                          
                         </Text>
                         <Text
                           className="mt-1 text-gray-500 text-xs tracking-[0.12px]"
                           size="txtUrbanistMedium12Gray500"
                         >
-                          {data.uri}
+                          
                         </Text>
                       </div>
                       <div className="flex flex-row items-center justify-between w-full">
@@ -594,10 +594,10 @@ console.log(hours , minutes , seconds)
                               alt="sort One"
                             />
                             <Text
-                              className="text-black-900 text-sm tracking-[0.14px]"
+                              className="text-black-1200 text-sm tracking-[0.19px]"
                               size="txtUrbanistMedium14Black900"
                             >
-                              2,42 ETH
+                              {formatUnits(data.threshold, 18)} ETH
                             </Text>
                           </div>
                         </div>

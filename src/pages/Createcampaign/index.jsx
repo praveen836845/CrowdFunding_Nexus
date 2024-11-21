@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Sidebar } from "react-pro-sidebar";
 import { useNavigate } from "react-router-dom";
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from "wagmi";
-import { parseEther } from "ethers";
+import { formatUnits, parseEther } from "ethers";
 
 import {CrowdFundingABI} from '../../abi/constants'
 import {CrowdFundingAddress} from '../../abi/constants'
@@ -121,7 +121,8 @@ const ShopInfoForm = ({ onSubmit }) => {
       
           const TARGET = parseEther(target).toString();
           const MINAMOUNT = parseEther(minAmount).toString();
-          console.log("Target" , TARGET);
+          
+          
           // Create the URIs
           const finalImageURI = `https://${GATEWAY}/ipfs/${imageIPFS}`;
           const finalTier1URI = `https://${GATEWAY}/ipfs/${tier1IPFS}`;
