@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CreateCampaign from "pages/Createcampaign";
+import { toast } from "react-hot-toast"; 
+
 //import Modal from "../../components/Modal";
 import { CampaignNFTABI } from "abi/constants";
 import WalletButton from "pages/Walletconnect";
@@ -11,7 +13,7 @@ import {
   useReadContract,
 } from "wagmi";
 import { config } from "App";
-import { writeContract ,waitForTransactionReceipt } from "wagmi/actions";
+import { writeContract, waitForTransactionReceipt } from "wagmi/actions";
 import { CrowdFundingABI } from "../../abi/constants";
 import { CrowdFundingAddress } from "../../abi/constants";
 
@@ -25,7 +27,7 @@ const MyNft = ({ onSubmit }) => {
   const [card, setCard] = useState(false);
   const { address, isConnected } = useAccount(); // This is the client address
   const { writeContractAsync, isPending } = useWriteContract();
-  const  [Approve , setApprove] = useState(false);
+  const [Approve, setApprove] = useState(false);
   const [campaignData, setCampaignData] = useState([]);
   const CONTRACT_ADDRESS = CrowdFundingAddress;
 
@@ -80,50 +82,118 @@ const MyNft = ({ onSubmit }) => {
     });
   }
 
-  console.log("NFTlisted" , matchedData);
+  console.log("NFTlisted", matchedData);
   // matchedData = [{
   //   tierImage : 'https://gateway.pinata.cloud/ipfs/QmQBpkP3F5WzxHaEc4UQEDS5GxoZcCfRe6XFttzHfSqkca'
   // }]
 
-  const HandleApprove = async(campaignid , nftContract , tokenId) => {
+  // const HandleApprove = async(campaignid , nftContract , tokenId) => {
+  //   try {
+  //     console.log("changes in the inside" , campaignid , nftContract , tokenId)
+  //     const hash = await writeContract(config ,{
+  //       address: nftContract,
+  //       abi: CampaignNFTABI,
+  //       functionName: 'approve',
+  //       args: [CONTRACT_ADDRESS , tokenId],
+  //     });
+  //     await  waitForTransactionReceipt(config , {hash, pollingInterval: 500})  // Time taken
+  //     console.log("Approve Successfully: ", hash);
+
+  //   } catch (error) {
+  //     console.error("Error donating to campaign: ", error);
+  //   }
+  // }
+
+  const HandleApprove = async (campaignid, nftContract, tokenId) => {
     try {
-      console.log("changes in the inside" , campaignid , nftContract , tokenId)
-      const hash = await writeContract(config ,{
-        address: nftContract,
-        abi: CampaignNFTABI,
-        functionName: 'approve',
-        args: [CONTRACT_ADDRESS , tokenId],
-      });
-      await  waitForTransactionReceipt(config , {hash, pollingInterval: 500})  // Time taken
-      console.log("Approve Successfully: ", hash);
-  
-      
+      // Display loading toast message
+      await toast.promise(
+        (async () => {
+          console.log(
+            "changes in the inside",
+            campaignid,
+            nftContract,
+            tokenId
+          );
+
+          // Call contract function to approve
+          const hash = await writeContract(config, {
+            address: nftContract,
+            abi: CampaignNFTABI,
+            functionName: "approve",
+            args: [CONTRACT_ADDRESS, tokenId],
+          });
+
+          // Wait for transaction receipt
+          await waitForTransactionReceipt(config, {
+            hash,
+            pollingInterval: 500,
+          });
+
+          // Return the success message and hash for further display in the toast
+          console.log("Approve Successfully: ", hash);
+          return hash; // this value will be used to display the success message
+        })(),
+        {
+          loading: `Approving token ${tokenId}...`, // Loading state message
+          success: (hash) => `Approval successful! Transaction Hash: ${hash}`, // Success state message with the hash
+          error: (error) => `Approval failed: ${error.message}`, // Error state message
+        }
+      );
     } catch (error) {
       console.error("Error donating to campaign: ", error);
     }
+  };
+
+  // const HandleNFTlistsale = async (campaignId, nftContract, tokenId) => {
+  //   try {
+  //     console.log("changes in the inside", campaignId, nftContract, tokenId);
+  //     await HandleApprove(campaignId, nftContract, tokenId);
+  //     // Input taken from the User  : price
+  //     const hash = await writeContractAsync({
+  //       address: CONTRACT_ADDRESS,
+  //       abi: CrowdFundingABI,
+  //       functionName: "listNFTForSale",
+  //       args: [campaignId, tokenId, "	1000000000000000000"], // Price in eth convert wei
+  //     });
+  //     console.log("Successfully Listed ", hash);
+  //   } catch (error) {
+  //     console.error("Error donating to campaign: ", error);
+  //   }
+  // };
+
+const HandleNFTlistsale = async (campaignId, nftContract, tokenId) => {
+  try {
+    // Display loading toast message for the entire listing process
+    await toast.promise(
+      (async () => {
+        console.log("changes in the inside", campaignId, nftContract, tokenId);
+
+        // First, handle the approval process
+        await HandleApprove(campaignId, nftContract, tokenId);
+
+        // Then, list the NFT for sale
+        const hash = await writeContractAsync({
+          address: CONTRACT_ADDRESS,
+          abi: CrowdFundingABI,
+          functionName: "listNFTForSale",
+          args: [campaignId, tokenId, "1000000000000000000"], // Price in wei (1 ETH = 1000000000000000000 wei)
+        });
+
+        console.log("Successfully Listed", hash);
+        return hash; // Return the transaction hash for use in the success toast
+      })(),
+      {
+        loading: `Listing NFT ${tokenId} for sale...`, // Loading message
+        success: (hash) => `NFT listed for sale successfully! Transaction Hash: ${hash}`, // Success message with hash
+        error: (error) => `Error listing NFT for sale: ${error.message}`, // Error message
+      }
+    );
+  } catch (error) {
+    // Catch any unexpected errors
+    console.error("Error in HandleNFTlistsale: ", error);
   }
-
-
-  const HandleNFTlistsale  = async(campaignId , nftContract , tokenId) => {
-  
-    try {
-      console.log("changes in the inside" , campaignId , nftContract , tokenId)
-      await HandleApprove(campaignId , nftContract , tokenId)
-      // Input taken from the User  : price
-      const hash = await writeContractAsync({
-        address: CONTRACT_ADDRESS,
-        abi: CrowdFundingABI,
-        functionName: 'listNFTForSale',
-        args: [campaignId , tokenId , '	1000000000000000000'],  // Price in eth convert wei 
-      });
-      console.log("Successfully Listed ", hash);
-      
-    } catch (error) {
-      console.error("Error donating to campaign: ", error);
-    }
-    
-  }
-
+};
 
 
   useEffect(() => {
@@ -138,7 +208,7 @@ const MyNft = ({ onSubmit }) => {
     }
 
     processCampaigns();
-  }, [data, card, NFTdata , Approve]);
+  }, [data, card, NFTdata, Approve]);
 
   const formatTime = (seconds) => {
     const h = Math.floor(seconds / 3600);
@@ -273,15 +343,11 @@ const MyNft = ({ onSubmit }) => {
                                 ? "Current Collection"
                                 : "Total Collection"}
                             </Text>
-                            <div
-                              className="flex flex-row font-urbanist gap-1.5 items-center justify-start mt-1 w-[98%] md:w-full"
-                             
-                            >
+                            <div className="flex flex-row font-urbanist gap-1.5 items-center justify-start mt-1 w-[98%] md:w-full">
                               <Img
                                 className="h-4 w-4 bg-white-A700 "
                                 src="images/img_sort.svg"
                                 alt="sort Two"
-                               
                               />
                               <Text
                                 className="text-black-900 text-sm tracking-[0.14px]"
@@ -299,9 +365,14 @@ const MyNft = ({ onSubmit }) => {
                               color="gray_900"
                               size="xs"
                               variant="fill"
-                              
                               // onClick={handleShowClick}
-                              onClick={() => {HandleNFTlistsale(campaign.campaignId ,campaign.nftContract, campaign.tokenId )}}
+                              onClick={() => {
+                                HandleNFTlistsale(
+                                  campaign.campaignId,
+                                  campaign.nftContract,
+                                  campaign.tokenId
+                                );
+                              }}
 
                               // onClick={() => HandleDonateClick(index)}
                             >

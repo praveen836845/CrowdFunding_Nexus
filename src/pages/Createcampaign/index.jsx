@@ -337,7 +337,7 @@ const ShopInfoForm = ({ onSubmit }) => {
       {/* Form Data Section */}
       <div className="form-scrollable">
         <form onSubmit= {handleSubmit}>
-          <div className="form-group">
+          {/* <div className="form-group">
             <label className="label">Owner Wallet Address</label>
             <input
               type="text"
@@ -346,7 +346,7 @@ const ShopInfoForm = ({ onSubmit }) => {
               onChange={(event) => setOwner(event.target.value)}
               
             />
-          </div>
+          </div> */}
           <div className="form-group">
             <label className="label">Title</label>
             <input
