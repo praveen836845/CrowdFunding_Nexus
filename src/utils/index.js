@@ -1,3 +1,11 @@
+import { CampaignNFTABI } from "abi/constants";
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+  useReadContract,
+} from "wagmi";
+
 export const handleSectionNavigation = (id) => {
   const element = document.getElementById(id);
   const offset = 45;
@@ -11,3 +19,8 @@ export const handleSectionNavigation = (id) => {
     behavior: "smooth",
   });
 };
+
+
+
+
+

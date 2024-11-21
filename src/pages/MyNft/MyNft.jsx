@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import CreateCampaign from "pages/Createcampaign";
 //import Modal from "../../components/Modal";
-import WalletButton from "pages/Walletconnect";
+import { CampaignNFTABI } from "abi/constants";
 
+import WalletButton from "pages/Walletconnect";
 import { Button, Img, List, Text } from "components";
 import {
   useAccount,
@@ -22,6 +23,7 @@ import SideBar from "components/Sidebar/SideBar";
 const MyNft = ({ onSubmit }) => {
   const [card, setCard] = useState(false);
   const { address, isConnected } = useAccount(); // This is the client address
+  const { writeContractAsync, isPending } = useWriteContract();
 
   const [campaignData, setCampaignData] = useState([]);
   const CONTRACT_ADDRESS = CrowdFundingAddress;
@@ -82,10 +84,23 @@ const MyNft = ({ onSubmit }) => {
   //   tierImage : 'https://gateway.pinata.cloud/ipfs/QmQBpkP3F5WzxHaEc4UQEDS5GxoZcCfRe6XFttzHfSqkca'
   // }]
 
+  const HandleApprove = async() => {
+    try {
+      console.log("changes in the inside")
+      const hash = await writeContractAsync({
+        address: "0xa55f62464137C37D2aE88320b5042721416CD1B5",
+        abi: CampaignNFTABI,
+        functionName: 'approve',
+        args: ["0xa55f62464137C37D2aE88320b5042721416CD1B5" , 1],
+      });
+      console.log("Donated Successfully: ", hash);
+      
+    } catch (error) {
+      console.error("Error donating to campaign: ", error);
+    }
+  }
 
 
-
-  
 
   useEffect(() => {
     if (!data) return;
@@ -244,9 +259,10 @@ const MyNft = ({ onSubmit }) => {
                           color="gray_900"
                           size="xs"
                           variant="fill"
-                          disabled={true}
+                         
                           // onClick={handleShowClick}
-                          onClick={handleCardClick}
+                          // onClick={handleCardClick}
+                          onClick = {() => {HandleApprove()}}
 
                           // onClick={() => HandleDonateClick(index)}
                         >
