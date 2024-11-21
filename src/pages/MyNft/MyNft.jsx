@@ -83,9 +83,9 @@ const MyNft = ({ onSubmit }) => {
   }
 
   console.log("NFTlisted", matchedData);
-  // matchedData = [{
-  //   tierImage : 'https://gateway.pinata.cloud/ipfs/QmQBpkP3F5WzxHaEc4UQEDS5GxoZcCfRe6XFttzHfSqkca'
-  // }]
+  matchedData = [{
+    tierImage : 'https://gateway.pinata.cloud/ipfs/QmQBpkP3F5WzxHaEc4UQEDS5GxoZcCfRe6XFttzHfSqkca'
+  }]
 
   // const HandleApprove = async(campaignid , nftContract , tokenId) => {
   //   try {
