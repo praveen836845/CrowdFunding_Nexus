@@ -162,8 +162,8 @@ const MarketPage = () => {
           </div>
         </Sidebar>
         <div className="flex flex-1 flex-col gap-[39px] items-center justify-start md:px-5 w-full">
-          <div className="bg-white-A700 flex md:flex-col flex-row md:gap-10 items-center justify-between outline outline-gray-100 p-[34px] sm:px-5 w-full">
-            <Input
+          {/* <div className="bg-white-A700 flex md:flex-col flex-row md:gap-10 items-center justify-between outline outline-gray-100 p-[34px] sm:px-5 w-full"> */}
+            {/* <Input
               name="SearchInput"
               placeholder="Search items, collections, and users"
               value={searchinputvalue}
@@ -193,8 +193,8 @@ const MarketPage = () => {
               }
               shape="round"
               size="md"
-            ></Input>
-            <div className="flex flex-row font-urbanist gap-[30px] items-center justify-center md:mt-0 my-0.5">
+            ></Input> */}
+            {/* <div className="flex flex-row font-urbanist gap-[30px] items-center justify-center md:mt-0 my-0.5">
               <Button
                 className="cursor-pointer flex items-center justify-center min-w-[137px]"
                 leftIcon={
@@ -236,17 +236,18 @@ const MarketPage = () => {
                 isSearchable={false}
                 options={userTwoOptionsList}
               />
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
           <div className="flex flex-col font-urbanist gap-5 items-start justify-start w-[95%] md:w-full">
-            <Text
+            {/* <Text
               className="sm:text-3xl md:text-[32px] text-[34px] text-black-900 tracking-[0.34px]"
               size="txtUrbanistSemiBold34"
             >
               Discover
-            </Text>
+            </Text> */}
             <div className="flex flex-col items-center justify-start ml-0.5 md:ml-[0] w-full">
-              <div className="flex sm:flex-col flex-row sm:gap-5 items-center justify-start rounded-[14px] w-full">
+              {/* search bar and other menus */}
+              {/* <div className="flex sm:flex-col flex-row sm:gap-5 items-center justify-start rounded-[14px] w-full">
                 <Button
                   className="cursor-pointer flex items-center justify-center min-w-[134px] rounded-[14px]"
                   leftIcon={
@@ -315,9 +316,10 @@ const MarketPage = () => {
                     Filter & Sort
                   </div>
                 </Button>
-              </div>
+               </div> */}
               <div className="flex flex-col items-center justify-start mt-[30px] w-full">
                 <div className="md:gap-5 gap-[19px] grid sm:grid-cols-1 md:grid-cols-2 grid-cols-4 justify-center min-h-[auto] w-full">
+                  {/*                                                                       map over the                                                                         */}
                   <div className="bg-white-A700 flex flex-1 flex-col gap-5 items-center justify-start p-1.5 rounded-[15px] shadow-bs1 w-full">
                     <div
                       className="bg-cover bg-no-repeat flex flex-col h-[140px] items-end justify-start p-2 rounded-[12px] w-full"
