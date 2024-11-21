@@ -119,9 +119,9 @@ const ShopInfoForm = ({ onSubmit }) => {
             uploadFile(tier3Image)
           ]);
       
-          const TARGET = parseEther(target).toString();
-          const MINAMOUNT = parseEther(minAmount).toString();
-          
+          const TARGET = Number(target).toString();
+          const MINAMOUNT = Number(minAmount).toString();
+          console.log("Target", TARGET );
           
           // Create the URIs
           const finalImageURI = `https://${GATEWAY}/ipfs/${imageIPFS}`;
@@ -352,7 +352,7 @@ const ShopInfoForm = ({ onSubmit }) => {
             <input
               type="number"
               className="input"
-              placeholder="Target Amount"
+              placeholder="Target Amount in Wei"
               onChange= {(event) => setTarget(event.target.value)}
             />
           </div>
@@ -361,6 +361,7 @@ const ShopInfoForm = ({ onSubmit }) => {
             <input
               type="date"
               className="input"
+              
               onChange={(event) => setDeadline(event.target.value)}
               
             />
@@ -370,7 +371,7 @@ const ShopInfoForm = ({ onSubmit }) => {
             <input
               type="number"
               className="input"
-              placeholder="Minimum Amount"
+              placeholder="Minimum Amount in Wei"
               onChange={(event) => setMinAmount(event.target.value)}
               
             />

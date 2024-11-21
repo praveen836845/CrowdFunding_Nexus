@@ -54,7 +54,7 @@ const MyNft = ({ onSubmit }) => {
   });
 
   // console.log(data  , "getCampaign" );
-  // console.log(NFTdata, "NFTData");
+  console.log(NFTdata, "NFTData");
 
   let matchedData;
   if (NFTdata) {
@@ -82,7 +82,7 @@ const MyNft = ({ onSubmit }) => {
     });
   }
 
-  // console.log("NFTlisted", matchedData);
+  console.log("NFTlisted", matchedData);
   // matchedData = [{
   //   tierImage : 'https://gateway.pinata.cloud/ipfs/QmQBpkP3F5WzxHaEc4UQEDS5GxoZcCfRe6XFttzHfSqkca'
   // }]
