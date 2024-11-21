@@ -6,17 +6,59 @@ import { useNavigate } from "react-router-dom";
 import { Button, Img, Input, SelectBox, Text } from "components";
 
 import { CloseSVG } from "../../assets/images";
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+  useReadContract,
+} from "wagmi";
+import { CrowdFundingABI } from "../../abi/constants";
+import { CrowdFundingAddress } from "../../abi/constants";
 
 const userTwoOptionsList = [
   { label: "Option1", value: "option1" },
   { label: "Option2", value: "option2" },
   { label: "Option3", value: "option3" },
 ];
+ 
+const CONTRACT_ADDRESS = CrowdFundingAddress
+
+
+
+
 
 const MarketPage = () => {
   const navigate = useNavigate();
 
   const [searchinputvalue, setSearchinputvalue] = React.useState("");
+  const {
+    data :ListedNFT,
+    isError,
+    isLoading: contractLoading,
+  } = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: CrowdFundingABI,
+    functionName: "getAllCampaignListedNFTs",
+  });
+
+  const {
+    data: allcampapign,
+    isErrors,
+    isLoading: contractLoadings,
+  } = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: CrowdFundingABI,
+    functionName: "getCampaigns",
+  });
+ console.log(">>>>getAllCampaignListedNFTs" , ListedNFT);
+
+
+const HandlebuyNFT =  async()=> {
+
+}
+
+
+
 
   return (
     <>
